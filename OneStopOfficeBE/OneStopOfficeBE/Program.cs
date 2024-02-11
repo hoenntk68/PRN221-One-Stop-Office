@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.Models;
 using OneStopOfficeBE.Services;
 using OneStopOfficeBE.Services.Impl;
@@ -15,7 +16,9 @@ internal class Program
         // Add services to the container.
         builder.Services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options => options.JsonSerializerOptions.DefaultIgnoreCondition = 
+            System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull);
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -42,6 +45,7 @@ internal class Program
             });
 
         builder.Services.AddDbContext<PRN221_OneStopOfficeContext>();
+        builder.Services.AddScoped<ValidateTokenAttribute>();
         builder.Services.AddScoped<UserService, UserServiceImpl>();
 
         var app = builder.Build();

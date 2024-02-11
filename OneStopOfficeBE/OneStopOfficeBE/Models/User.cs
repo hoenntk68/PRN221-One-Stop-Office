@@ -18,6 +18,8 @@ namespace OneStopOfficeBE.Models
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
+        public string? Token { get; set; }
+        public bool? IsTokenValid { get; set; }
 
         public virtual ICollection<Request> Requests { get; set; }
         public virtual ICollection<staff> staff { get; set; }

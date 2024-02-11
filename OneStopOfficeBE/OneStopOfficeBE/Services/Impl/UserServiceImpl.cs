@@ -22,6 +22,17 @@ namespace OneStopOfficeBE.Services.Impl
             _context = context;
             _appSettings = appSettings.CurrentValue;
         }
+
+        public BaseResponse GetInfo(string id)
+        {
+            User? user = _context.Users.SingleOrDefault(u => u.UserId == id);
+            if (user == null)
+            {
+                return BaseResponse.ofFailed(ErrorMessageConstant.USER_NOT_FOUND);
+            }
+            return BaseResponse.ofSucceeded(user);
+        }
+
         public BaseResponse Login(LoginRequestDto loginDto)
         {
             staff? staff = _context.staff
@@ -37,10 +48,27 @@ namespace OneStopOfficeBE.Services.Impl
 
             LoginResponseDto responseData = new LoginResponseDto
             {
-                token = GenerateToken(staff)
+                Token = GenerateToken(staff)
             };
+            var user = staff.User;
+            user.Token = responseData.Token;
+            user.IsTokenValid = true;
+            _context.Users.Update(user);
+            _context.SaveChanges();
             return BaseResponse.ofSucceeded(responseData);
-            //return BaseResponse.ofSucceeded();
+        }
+
+        public BaseResponse Logout(string id)
+        {
+            var user = _context.Users.SingleOrDefault(u => u.UserId == id);
+            if (user == null)
+            {
+                return BaseResponse.ofFailed(ErrorMessageConstant.UNAUTHORIZED);
+            }
+            user.IsTokenValid = false;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return BaseResponse.ofSucceeded();
         }
 
         private string GenerateToken(staff staff)
@@ -52,9 +80,10 @@ namespace OneStopOfficeBE.Services.Impl
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("IsSuperAdmin", staff.IsSuperAdmin.ToString()),
-                    new Claim("TokenId", Guid.NewGuid().ToString())
+                    new Claim("TokenId", Guid.NewGuid().ToString()),
+                    new Claim("Username", staff.User.UserId.ToString()),
                 }),
-                Expires = DateTime.UtcNow.AddSeconds(30),
+                Expires = DateTime.UtcNow.AddMilliseconds(_appSettings.JwtExpInMs),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)
             };
             var token = jwtTokenHandler.CreateToken(tokenDescription);

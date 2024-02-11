@@ -1,11 +1,21 @@
-﻿using OneStopOfficeBE.Constants;
+﻿using Newtonsoft.Json;
+using OneStopOfficeBE.Constants;
+using System.Text.Json.Serialization;
 
 namespace OneStopOfficeBE.DTOs.Response
 {
     public class BaseResponse
     {
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
+
+        [JsonPropertyName("code")]
+        public int Code { get; set; }
+
+        [JsonPropertyName("message")]
         public string Message { get; set; }
+
+        [JsonPropertyName("data")]
         public object Data { get; set; }
 
         public static BaseResponse ofSucceeded()

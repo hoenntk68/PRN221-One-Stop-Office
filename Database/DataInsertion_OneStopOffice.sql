@@ -1,5 +1,5 @@
 ﻿-- Insert into [user]
-INSERT INTO [user] ([user_id], full_name, dob, gender, address, phone_number, email)
+INSERT INTO [User] ([user_id], full_name, dob, gender, address, phone_number, email)
 VALUES
     ('123456789012', N'Nguyễn Thị Ánh', '1995-02-15', 0, N'123 Đường Láng, Hà Nội', '+123456789012', 'nguyenthianh@example.com'),
     ('234567890123', N'Trần Văn Bảo', '1987-08-20', 1, N'456 Đường Hồ Chí Minh, Hồ Chí Minh', '+234567890123', 'tranbao@example.com'),
@@ -55,7 +55,7 @@ VALUES
 	-- super admin
     ('000000000000', N'Khoa Thị Văn Học', '2003-07-21', 1, N'Km29, Đại lộ Thăng Long, Thạch Thất, Hà Nội', '+567890123456', 'eikh@example.com');
 
-INSERT INTO staff([user_id], is_super_admin, [password]) VALUES
+INSERT INTO Staff([user_id], is_super_admin, [password]) VALUES
 	('111111111111', 0, '123456'),
 	('222222222222', 0, '123456'),
 	('333333333333', 0, '123456'),
@@ -64,7 +64,7 @@ INSERT INTO staff([user_id], is_super_admin, [password]) VALUES
 	('000000000000', 1, '123456');
 
 
-INSERT INTO category(category_name, description)
+INSERT INTO Category(category_name, description)
 VALUES
     (N'Hồ sơ lĩnh vực đất đai', N''),
     (N'Hồ sơ lĩnh vực tài nguyên nước', N''),
@@ -78,7 +78,7 @@ VALUES
     (N'Hồ sơ khai thác và sử dụng thông tin, dữ liệu tài nguyên và môi trường', N'');
 
 
-INSERT INTO staff_category(staff_id, category_id)
+INSERT INTO Staff_Category(staff_id, category_id)
 VALUES 
 	(1,1),
 	(1,2),

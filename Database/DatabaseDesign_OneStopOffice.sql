@@ -1,5 +1,7 @@
 CREATE DATABASE PRN221_OneStopOffice;
 
+-- drop database if exists PRN221_OneStopOffice;
+
 -- Switch to the newly created database context
 USE PRN221_OneStopOffice;
 

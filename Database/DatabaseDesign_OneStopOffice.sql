@@ -2,6 +2,8 @@ CREATE DATABASE PRN221_OneStopOffice;
 
 -- drop database if exists PRN221_OneStopOffice;
 
+-- use master;
+
 -- Switch to the newly created database context
 USE PRN221_OneStopOffice;
 
@@ -13,7 +15,7 @@ CREATE TABLE [role] (
 );
 */
 -- Create the 'user' table
-CREATE TABLE [user] (
+CREATE TABLE [User] (
     [user_id] VARCHAR(50) PRIMARY KEY,
     full_name NVARCHAR(100) NOT NULL,
     dob DATETIME,
@@ -21,26 +23,28 @@ CREATE TABLE [user] (
     [address] NVARCHAR(500),
     phone_number VARCHAR(15),
     email VARCHAR(255),
+	token VARCHAR(1000),
+	is_token_valid BIT
 );
 
 -- Create the 'staff' table
-CREATE TABLE staff (
+CREATE TABLE [Staff] (
     staff_id INT PRIMARY KEY IDENTITY(1,1),
-    [user_id] VARCHAR(50),
-    is_super_admin BIT,
-	password TEXT,
+    [user_id] VARCHAR(50) NOT NULL,
+    is_super_admin BIT NOT NULL,
+	password VARCHAR(100) NOT NULL,
     FOREIGN KEY ([user_id]) REFERENCES [user]([user_id])
 );
 
 -- Create the 'category' table
-CREATE TABLE category (
+CREATE TABLE Category (
     category_id INT PRIMARY KEY IDENTITY(1,1),
     category_name NVARCHAR(100) NOT NULL,
     description NVARCHAR(500)
 );
 
 -- Create the 'category_staff' table
-CREATE TABLE staff_category (
+CREATE TABLE Staff_Category (
     staff_id INT,
     category_id INT,
     FOREIGN KEY (category_id) REFERENCES category(category_id),
@@ -49,7 +53,7 @@ CREATE TABLE staff_category (
 );
 
 -- Create the 'request' table
-CREATE TABLE request (
+CREATE TABLE Request (
     request_id INT PRIMARY KEY,
     [user_id] VARCHAR(50),
     category_id INT,
@@ -59,17 +63,19 @@ CREATE TABLE request (
     FOREIGN KEY (category_id) REFERENCES category(category_id)
 );
 
--- IF OBJECT_ID('[request]', 'U') IS NOT NULL DROP TABLE [request];
--- IF OBJECT_ID('[category]', 'U') IS NOT NULL DROP TABLE [category];
--- IF OBJECT_ID('[staff_category]', 'U') IS NOT NULL DROP TABLE [staff_category];
--- IF OBJECT_ID('[staff]', 'U') IS NOT NULL DROP TABLE [staff];
--- IF OBJECT_ID('[user]', 'U') IS NOT NULL DROP TABLE [user];
--- IF OBJECT_ID('[role]', 'U') IS NOT NULL DROP TABLE [role];
+/*
+IF OBJECT_ID('[request]', 'U') IS NOT NULL DROP TABLE [request];
+IF OBJECT_ID('[staff_category]', 'U') IS NOT NULL DROP TABLE [staff_category];
+IF OBJECT_ID('[category]', 'U') IS NOT NULL DROP TABLE [category];
+IF OBJECT_ID('[staff]', 'U') IS NOT NULL DROP TABLE [staff];
+IF OBJECT_ID('[user]', 'U') IS NOT NULL DROP TABLE [user];
+IF OBJECT_ID('[role]', 'U') IS NOT NULL DROP TABLE [role];
+*/
 
 
 -- SELECT * FROM [role];
-SELECT * FROM [user];
-SELECT * FROM staff;
-SELECT * FROM category;
-SELECT * FROM staff_category;
-SELECT * FROM request;
+SELECT * FROM [User];
+SELECT * FROM [Staff];
+SELECT * FROM [Category]
+SELECT * FROM [Staff_Category];
+SELECT * FROM [Request];

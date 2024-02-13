@@ -1,11 +1,27 @@
 <template lang="">
     <div>
-        <h1>test123123</h1>
+        <el-button @click="test">test</el-button>
     </div>
 </template>
 <script>
+import { useAuthStore } from "../stores/auth";
 export default {
+    setup() {
+        const authStore = useAuthStore();
 
+        const {
+            credential,
+            authLogin,
+            test,
+        } = authStore;
+
+
+        return {
+            credential,
+            authLogin,
+            test,
+        }
+    }
 }
 </script>
 <style lang="">

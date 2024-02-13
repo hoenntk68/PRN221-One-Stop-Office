@@ -16,7 +16,7 @@ export const useCounterStore = defineStore('counter', () => {
     service.request.getRequest(
       {
         "user_name": "000000000000",
-        "password": "123456",
+        "password": "1234567",
       },
       (res) => {
         console.log(res);

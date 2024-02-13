@@ -48,7 +48,9 @@ namespace OneStopOfficeBE.Services.Impl
 
             LoginResponseDto responseData = new LoginResponseDto
             {
-                Token = GenerateToken(staff)
+                Token = GenerateToken(staff),
+                Username = loginDto.userName,
+                Fullname = staff.User.FullName
             };
             var user = staff.User;
             user.Token = responseData.Token;

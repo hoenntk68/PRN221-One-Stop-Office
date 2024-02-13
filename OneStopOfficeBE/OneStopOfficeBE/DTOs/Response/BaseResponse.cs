@@ -22,15 +22,17 @@ namespace OneStopOfficeBE.DTOs.Response
         {
             return new BaseResponse
             {
+                Code = 200,
                 Success = true,
                 Message = ErrorMessageConstant.SUCCESS
             };
         }
 
-        public static BaseResponse ofSucceeded(object data)
+        public static BaseResponse ofSucceeded(object data, int responseCode = 200)
         {
             return new BaseResponse
             {
+                Code = responseCode,
                 Success = true,
                 Message = ErrorMessageConstant.SUCCESS,
                 Data =  data
@@ -54,6 +56,11 @@ namespace OneStopOfficeBE.DTOs.Response
                 Success = false,
                 Message = message,
             };
+        }
+
+        public static bool isSucceeded(BaseResponse response)
+        {
+            return response.Code == 200;
         }
     }
 }

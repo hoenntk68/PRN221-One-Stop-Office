@@ -20,9 +20,14 @@ namespace OneStopOfficeBE.Controllers
         }
 
         [HttpPost("Login")]
-        public BaseResponse Login(LoginRequestDto loginDto)
+        public IActionResult Login(LoginRequestDto loginDto)
         {
-            return _userService.Login(loginDto);
+            BaseResponse response = _userService.Login(loginDto);
+            if (BaseResponse.isSucceeded(response))
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
         [HttpGet("ViewProfile/{id}")]
@@ -35,9 +40,14 @@ namespace OneStopOfficeBE.Controllers
 
         [HttpGet("Logout/{id}")]
         [Authorize]
-        public BaseResponse Logout(string id)
+        public IActionResult Logout(string id)
         {
-            return _userService.Logout(id);
+            BaseResponse response = _userService.Logout(id);
+            if (BaseResponse.isSucceeded(response))
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
     }
 }

@@ -22,7 +22,6 @@
                 <td><el-button @click="authLogin">Login</el-button></td>
             </tr>
         </table>
-
     </div>
 </template>
 <script>
@@ -31,13 +30,10 @@ export default {
     setup() {
         const authStore = useAuthStore();
 
-
-
         const {
             credential,
             authLogin
         } = authStore;
-
 
         return {
             credential,
@@ -54,7 +50,6 @@ table {
     padding: 1rem;
     background-color: var(--color-border);
     border-radius: .5rem;
-
 
     td {
         padding: 4px 8px;

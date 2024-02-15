@@ -55,6 +55,7 @@ internal class Program
         builder.Services.AddDbContext<PRN221_OneStopOfficeContext>();
         builder.Services.AddScoped<ValidateTokenAttribute>();
         builder.Services.AddScoped<UserService, UserServiceImpl>();
+        builder.Services.AddScoped<RequestService, RequestServiceImpl>();
 
         var app = builder.Build();
 

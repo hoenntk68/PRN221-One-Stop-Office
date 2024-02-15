@@ -11,31 +11,24 @@ export const useAuthStore = defineStore('auth', () => {
         password: '',
     })
 
-    const test = () => {
-        console.log(Cookies.get('access_token'));
-    }
-
     const authLogin = () => {
-        console.log(credential);
         service.user.login(
             {
                 "user_name": credential.cccd,
                 "password": credential.password,
             },
             (res) => {
-                console.log(res);
                 Cookies.set('access_token', res.token, { expires: 7 });
                 router.push('home');
             },
             (err) => {
                 console.log(err);
             }
-        );
+        )
     }
 
     return {
         credential,
         authLogin,
-        test,
     }
 })

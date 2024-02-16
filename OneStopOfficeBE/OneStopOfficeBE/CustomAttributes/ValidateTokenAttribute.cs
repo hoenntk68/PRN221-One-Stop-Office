@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.Models;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -7,14 +8,8 @@ namespace OneStopOfficeBE.CustomAttributes
 {
     public class ValidateTokenAttribute : ActionFilterAttribute
     {
-        //private readonly PRN221_OneStopOfficeContext _context;
-        //public ValidateTokenAttribute(PRN221_OneStopOfficeContext context)
-        //{
-        //    _context = context;
-        //}
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            //base.OnActionExecuting(context);
             var jwtToken = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (!string.IsNullOrEmpty(jwtToken))
             {
@@ -46,6 +41,15 @@ namespace OneStopOfficeBE.CustomAttributes
                         context.Result = new UnauthorizedResult();
                         return;
                     }
+                    var isSuperAdmin = token.Claims.FirstOrDefault(claim => claim.Type == "IsSuperAdmin")?.Value;
+                    JwtClaims claims = new JwtClaims()
+                    {
+                        Username = username,
+                        IsSuperAdmin = isSuperAdmin == "True"
+                    };
+                    context.ActionArguments["username"] = username;
+                    context.ActionArguments["isSuperAdmin"] = isSuperAdmin == "True";
+
                 }
                 catch (Exception ex)
                 {
@@ -54,6 +58,7 @@ namespace OneStopOfficeBE.CustomAttributes
                     Console.WriteLine($"Error decoding JWT token: {ex.Message}");
                 }
             }
+                base.OnActionExecuting(context);
         }
     }
 }

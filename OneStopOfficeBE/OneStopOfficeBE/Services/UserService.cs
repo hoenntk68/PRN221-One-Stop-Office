@@ -7,6 +7,6 @@ namespace OneStopOfficeBE.Services
     {
         BaseResponse GetInfo(string id);
         BaseResponse Login (LoginRequestDto loginRequest);
-        BaseResponse Logout(string id);
+        BaseResponse Logout(string username);
     }
 }

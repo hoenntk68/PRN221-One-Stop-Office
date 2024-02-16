@@ -38,11 +38,12 @@ namespace OneStopOfficeBE.Controllers
             return _userService.GetInfo(id);
         }
 
-        [HttpGet("Logout/{id}")]
+        [HttpGet("Logout")]
         [Authorize]
-        public IActionResult Logout(string id)
+        [ValidateToken]
+        public IActionResult Logout(string? username)
         {
-            BaseResponse response = _userService.Logout(id);
+            BaseResponse response = _userService.Logout(username);
             if (BaseResponse.isSucceeded(response))
             {
                 return Ok(response);

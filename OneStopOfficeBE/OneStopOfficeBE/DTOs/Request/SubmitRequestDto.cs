@@ -11,7 +11,7 @@ namespace OneStopOfficeBE.DTOs.Request
         [JsonPropertyName("reason")]
         public string reason { get; set; }
 
-        // [JsonIgnore]
-        // public IFormFile attachment { get; set; }
+        [JsonPropertyName("attachment")]
+        public IFormFile attachment { get; set; }
     }
 }

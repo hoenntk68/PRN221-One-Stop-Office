@@ -54,7 +54,7 @@ CREATE TABLE Staff_Category (
 
 -- Create the 'request' table
 CREATE TABLE Request (
-    request_id INT PRIMARY KEY,
+    request_id INT PRIMARY KEY IDENTITY(1,1),
     [user_id] VARCHAR(50),
     category_id INT,
     reason TEXT,

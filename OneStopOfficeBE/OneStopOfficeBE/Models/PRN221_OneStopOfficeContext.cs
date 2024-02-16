@@ -26,7 +26,7 @@ namespace OneStopOfficeBE.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server =(local); database = PRN221_OneStopOffice; uid=sa;pwd=123;Trusted_Connection=True;Encrypt=False");
+                optionsBuilder.UseSqlServer("server =BLUEWEIDY; database = PRN221_OneStopOffice; uid=sa;pwd=123456; TrustServerCertificate=True;");
             }
         }
 
@@ -51,9 +51,7 @@ namespace OneStopOfficeBE.Models
             {
                 entity.ToTable("Request");
 
-                entity.Property(e => e.RequestId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("request_id");
+                entity.Property(e => e.RequestId).HasColumnName("request_id");
 
                 entity.Property(e => e.Attachment)
                     .HasColumnType("text")
@@ -73,12 +71,12 @@ namespace OneStopOfficeBE.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Requests)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Request__categor__2EDAF651");
+                    .HasConstraintName("FK__Request__categor__440B1D61");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Requests)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Request__user_id__2DE6D218");
+                    .HasConstraintName("FK__Request__user_id__4316F928");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -144,17 +142,17 @@ namespace OneStopOfficeBE.Models
                     .WithMany(p => p.staff)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Staff__user_id__25518C17");
+                    .HasConstraintName("FK__Staff__user_id__36B12243");
 
                 entity.HasMany(d => d.Categories)
                     .WithMany(p => p.staff)
                     .UsingEntity<Dictionary<string, object>>(
                         "StaffCategory",
-                        l => l.HasOne<Category>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__categ__2A164134"),
-                        r => r.HasOne<staff>().WithMany().HasForeignKey("StaffId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__staff__2B0A656D"),
+                        l => l.HasOne<Category>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__categ__3B75D760"),
+                        r => r.HasOne<staff>().WithMany().HasForeignKey("StaffId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__staff__3C69FB99"),
                         j =>
                         {
-                            j.HasKey("StaffId", "CategoryId").HasName("PK__Staff_Ca__44373307F2F2B1B9");
+                            j.HasKey("StaffId", "CategoryId").HasName("PK__Staff_Ca__4437330741FC6AC6");
 
                             j.ToTable("Staff_Category");
 

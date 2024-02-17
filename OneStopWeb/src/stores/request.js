@@ -3,16 +3,19 @@ import service from "../plugins/service"
 import { reactive } from 'vue'
 
 export const useRequestStore = defineStore('request', () => {
-    const requestList = reactive({
-        data: {},
-      });
 
-    const getRequestList = async () => {
-        await service.request.getRequestList(
+    const requestList = reactive({
+        data: [],
+    });
+
+
+    const getRequestList = () => {
+        service.request.getRequestList(
             {
             },
             (res) => {
-                requestList.data = (res.data);
+                console.log(res);
+                requestList.data = requestList.data.concat(res);
             },
             (err) => {
                 console.log(err);
@@ -22,6 +25,6 @@ export const useRequestStore = defineStore('request', () => {
 
     return {
         getRequestList,
-        requestList
+        requestList,
     }
 })

@@ -1,6 +1,8 @@
 <template>
-  <RequestTable :requestList="anything"></RequestTable>
-  <button @click="getRequestList">Get Request List</button>
+  <div>
+    <RequestTable :requestList="anything"></RequestTable>
+    <button @click="getRequestList">Get Request List</button>
+  </div>
 </template>
 <script>
 import RequestTable from '@/components/RequestTable.vue'
@@ -15,9 +17,8 @@ export default {
 
     const anything = computed(() => requestStore.requestList.data)
 
-    onMounted(() => {
-      getRequestList()
-      console.log(('Result: ', requestStore))
+    onMounted(async () => {
+      await getRequestList()
     })
 
     return {

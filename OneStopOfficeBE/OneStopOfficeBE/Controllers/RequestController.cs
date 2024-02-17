@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
 using OneStopOfficeBE.Services;
@@ -28,6 +29,17 @@ namespace OneStopOfficeBE.Controllers
         public BaseResponse Store([FromForm] SubmitRequestDto submitRequest)
         {
             return _requestService.submitRequest(submitRequest);
+        }
+
+        [HttpGet("client/all")]
+        [ValidateToken]
+        public BaseResponse GetRequestPerUser(string? username) 
+        {
+            if (string.IsNullOrEmpty(username))
+            {
+                return BaseResponse.ofSucceeded();
+            }
+            return _requestService.GetRequestByUsername(username);
         }
     }
 }

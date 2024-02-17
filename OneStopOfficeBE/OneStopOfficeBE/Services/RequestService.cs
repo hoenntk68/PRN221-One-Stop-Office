@@ -12,5 +12,7 @@ namespace OneStopOfficeBE.Services
         //BaseResponse updateRequest(string id);
 
         BaseResponse cancelRequest(string id);
+
+        BaseResponse GetRequestByUsername(string username);
     }
 }

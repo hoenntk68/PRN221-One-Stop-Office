@@ -5,7 +5,7 @@ namespace OneStopOfficeBE.DTOs.Request
 {
     public class SubmitRequestDto
     {
-        [JsonPropertyName("category")]
+        [JsonPropertyName("category")]    
         public int category { get; set; }
 
         [JsonPropertyName("reason")]

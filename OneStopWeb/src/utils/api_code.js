@@ -4,6 +4,7 @@ const API_CODE = {
     API_U_001: "User/Login",
 
     //Request
+    API_RQ_001: "Request/client/all",
     
 
 };

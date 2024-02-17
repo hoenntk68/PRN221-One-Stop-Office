@@ -42,11 +42,6 @@ namespace OneStopOfficeBE.CustomAttributes
                         return;
                     }
                     var isSuperAdmin = token.Claims.FirstOrDefault(claim => claim.Type == "IsSuperAdmin")?.Value;
-                    JwtClaims claims = new JwtClaims()
-                    {
-                        Username = username,
-                        IsSuperAdmin = isSuperAdmin == "True"
-                    };
                     context.ActionArguments["username"] = username;
                     context.ActionArguments["isSuperAdmin"] = isSuperAdmin == "True";
 

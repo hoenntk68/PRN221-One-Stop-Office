@@ -5,6 +5,7 @@ using OneStopOfficeBE.DTOs.Response;
 using OneStopOfficeBE.Models;
 using OneStopOfficeBE.Constants;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.EntityFrameworkCore;
 
 namespace OneStopOfficeBE.Services.Impl
 {
@@ -80,6 +81,24 @@ namespace OneStopOfficeBE.Services.Impl
                 attachment.CopyTo(stream);
             }
             return attachmentFilePath;
+        }
+
+        public BaseResponse GetRequestByUsername(string username)
+        {
+            List<Request> requestList = _context.Requests
+                .Include(r => r.Category)
+                .Where(r => r.UserId == username)
+                .ToList();
+            List<RequestListResponseDto> responseList = requestList.Select(item =>
+                new RequestListResponseDto
+                {
+                    Id = item.RequestId,
+                    Category = item.Category.CategoryName,
+                    SubmittedAt = DateTime.Now,
+                    Status = "Submitted"
+                }
+            ).ToList();
+            return BaseResponse.ofSucceeded(responseList);
         }
     }
 }

@@ -8,6 +8,11 @@ export const useRequestStore = defineStore('request', () => {
         data: [],
     });
 
+    const requestModel = reactive({
+        'category': '',
+        'reason': '',
+        'attachment': '',
+    })
 
     const getRequestList = () => {
         service.request.getRequestList(
@@ -23,8 +28,26 @@ export const useRequestStore = defineStore('request', () => {
         )
     }
 
+    const submitRequest = async () => {
+        const formData = new FormData();
+        for (const key in requestModel) {
+            formData.append(key, requestModel[key]);
+        }
+        service.request.submitRequest(
+            formData,
+            (res) => {
+                console.log(res);
+            },
+            (err) => {
+                console.log(err);
+            }
+        )
+    }
+
     return {
-        getRequestList,
+        requestModel,
         requestList,
+        getRequestList,
+        submitRequest,
     }
 })

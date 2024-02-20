@@ -7,4 +7,8 @@ export default class RequestAPI extends BaseService {
         this.get(API_CODE.API_RQ_001, success, error, params);
     }
 
+    submitRequest(params = {}, success, error) {
+        this.post(API_CODE.API_RQ_002, success, error, params);
+    }
+
 }

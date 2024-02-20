@@ -61,7 +61,7 @@ export default class BaseService {
             .catch(e => this.logError(e, error));
     }
 
-    async post(endpoint, params = {}, success, error) {
+    async post(endpoint, success, error, params = {}) {
         await this.api
             .post(this.prefix + endpoint, params)
             .then(response => this.processResponse(response))
@@ -69,7 +69,7 @@ export default class BaseService {
             .catch(e => this.logError(e, error));
     }
 
-    async put(endpoint, params = {}, success, error) {
+    async put(endpoint, success, error, params = {}) {
         await this.api
             .put(this.prefix + endpoint, params)
             .then(response => this.processResponse(response))
@@ -77,7 +77,7 @@ export default class BaseService {
             .catch(e => this.logError(e, error));
     }
 
-    async delete(endpoint, data = {}, success, error) {
+    async delete(endpoint, success, error, data = {}) {
         await this.api
             .delete(this.prefix + endpoint, { data })
             .then(response => this.processResponse(response))
@@ -85,7 +85,7 @@ export default class BaseService {
             .catch(e => this.logError(e, error));
     }
 
-    async patch(endpoint, params = {}, success, error) {
+    async patch(endpoint, success, error, params = {}) {
         await this.api
             .patch(this.prefix + endpoint, params)
             .then(response => this.processResponse(response))

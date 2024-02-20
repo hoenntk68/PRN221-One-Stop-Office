@@ -5,7 +5,8 @@ const API_CODE = {
 
     //Request
     API_RQ_001: "Request/client/all",
-    
+    API_RQ_002: "Request/store",
+
 
 };
 

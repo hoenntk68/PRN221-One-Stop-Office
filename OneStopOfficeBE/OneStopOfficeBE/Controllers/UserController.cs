@@ -15,19 +15,23 @@ namespace OneStopOfficeBE.Controllers
     {
         private UserService _userService;
 
-        public UserController(UserService userService) {
+        public UserController(UserService userService)
+        {
             _userService = userService;
         }
 
         [HttpPost("Login")]
-        public IActionResult Login(LoginRequestDto loginDto)
+        public BaseResponse Login(LoginRequestDto loginDto)
         {
-            BaseResponse response = _userService.Login(loginDto);
-            if (BaseResponse.isSucceeded(response))
+            LoginResponseDto response = _userService.Login(loginDto);
+            if (response != null)
             {
-                return Ok(response);
+                return BaseResponse.Success(response);
             }
-            return BadRequest(response);
+            else
+            {
+                return BaseResponse.Error("error");
+            }
         }
 
         [HttpGet("ViewProfile/{id}")]
@@ -35,20 +39,25 @@ namespace OneStopOfficeBE.Controllers
         [ValidateToken]
         public BaseResponse ViewUserInfo(string id)
         {
-            return _userService.GetInfo(id);
+            User user = _userService.GetInfo(id);
+            if (user == null)
+            {
+                return BaseResponse.Error("error");
+            }
+            return BaseResponse.Success(user);
         }
 
         [HttpGet("Logout")]
         [Authorize]
         [ValidateToken]
-        public IActionResult Logout(string? username)
+        public BaseResponse Logout(string? username)
         {
-            BaseResponse response = _userService.Logout(username);
-            if (BaseResponse.isSucceeded(response))
+            bool response = _userService.Logout(username);
+            if (response)
             {
-                return Ok(response);
+                return BaseResponse.Success();
             }
-            return BadRequest(response);
+            return BaseResponse.Error("error");
         }
     }
 }

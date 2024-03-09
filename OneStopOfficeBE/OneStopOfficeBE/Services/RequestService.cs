@@ -1,18 +1,19 @@
 ﻿using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
+using OneStopOfficeBE.Models;
 
 namespace OneStopOfficeBE.Services
 {
     public interface RequestService
     {
-        BaseResponse getRequest(string id);
+        List<Request> GetRequest();
 
-        BaseResponse submitRequest(SubmitRequestDto submitRequest);
+        bool SubmitRequest(SubmitRequestDto submitRequest, string username);
 
-        //BaseResponse updateRequest(string id);
+        Request UpdateRequest(string id);
 
-        BaseResponse cancelRequest(string id);
+        bool CancelRequest(string id);
 
-        BaseResponse GetRequestByUsername(string username);
+        List<RequestListResponseDto> GetRequestByUsername(string username);
     }
 }

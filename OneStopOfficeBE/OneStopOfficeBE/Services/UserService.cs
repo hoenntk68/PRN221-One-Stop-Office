@@ -1,12 +1,13 @@
 ﻿using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
+using OneStopOfficeBE.Models;
 
 namespace OneStopOfficeBE.Services
 {
     public interface UserService
     {
-        BaseResponse GetInfo(string id);
-        BaseResponse Login (LoginRequestDto loginRequest);
-        BaseResponse Logout(string username);
+        User GetInfo(string id);
+        LoginResponseDto Login(LoginRequestDto loginRequest);
+        bool Logout(string username);
     }
 }

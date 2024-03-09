@@ -21,24 +21,25 @@ namespace OneStopOfficeBE.Services.Impl
             _appSettings = appSettings.CurrentValue;
         }
 
-        public BaseResponse cancelRequest(string id)
+        public bool CancelRequest(string id)
         {
             throw new NotImplementedException();
         }
 
-        public BaseResponse getRequest(string id)
+        public List<Request> GetRequest()
         {
-            return BaseResponse.ofSucceeded(_context.Requests.ToList());
+            return _context.Requests.ToList();
         }
 
-        public BaseResponse submitRequest(SubmitRequestDto submitRequest)
+        public bool SubmitRequest(SubmitRequestDto submitRequest, string username)
         {
             try
             {
                 if (submitRequest == null)
                 {
-                    return BaseResponse.ofFailed("Invalid request data.");
+                    return false;
                 }
+
 
                 int category = submitRequest.category;
                 string reason = submitRequest.reason;
@@ -48,6 +49,7 @@ namespace OneStopOfficeBE.Services.Impl
                 var request = new Request
                 {
                     CategoryId = category,
+                    UserId = username,
                     Reason = reason,
                     Attachment = attachmentFilePath
                 };
@@ -55,16 +57,14 @@ namespace OneStopOfficeBE.Services.Impl
                 _context.Requests.Add(request);
                 _context.SaveChanges();
 
-                return BaseResponse.ofSucceeded(request);
+                return true;
             }
             catch (Exception ex)
             {
                 string errorMessage = $"An error occurred while processing the request: {ex.GetType()}: {ex.Message}\n{ex.StackTrace}";
 
-                return BaseResponse.ofFailed(errorMessage);
+                return false;
             }
-
-
         }
 
         private string SaveAttachment(IFormFile attachment)
@@ -83,7 +83,7 @@ namespace OneStopOfficeBE.Services.Impl
             return attachmentFilePath;
         }
 
-        public BaseResponse GetRequestByUsername(string username)
+        public List<RequestListResponseDto> GetRequestByUsername(string username)
         {
             List<Request> requestList = _context.Requests
                 .Include(r => r.Category)
@@ -95,10 +95,18 @@ namespace OneStopOfficeBE.Services.Impl
                     Id = item.RequestId,
                     Category = item.Category.CategoryName,
                     SubmittedAt = DateTime.Now,
+                    ProcessNote = "Ok chờ đi em",
+                    ProcessedAt = null,
+                    File = "",
                     Status = "Submitted"
                 }
             ).ToList();
-            return BaseResponse.ofSucceeded(responseList);
+            return responseList;
+        }
+
+        public Request UpdateRequest(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

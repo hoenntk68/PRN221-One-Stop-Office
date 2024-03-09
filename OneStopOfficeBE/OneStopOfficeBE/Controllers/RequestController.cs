@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OneStopOfficeBE.Constants;
 using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
+using OneStopOfficeBE.Models;
 using OneStopOfficeBE.Services;
 
 namespace OneStopOfficeBE.Controllers
@@ -20,26 +22,37 @@ namespace OneStopOfficeBE.Controllers
         [HttpGet("request")]
         public BaseResponse Index()
         {
-            string id = "1";
+            List<Request> request = _requestService.GetRequest();
 
-            return _requestService.getRequest(id);
+            return BaseResponse.Success(request);
         }
 
         [HttpPost("store")]
-        public BaseResponse Store([FromForm] SubmitRequestDto submitRequest)
+        [ValidateToken]
+        public BaseResponse Store([FromForm] SubmitRequestDto submitRequest, string? username)
         {
-            return _requestService.submitRequest(submitRequest);
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(token))
+            {
+                return BaseResponse.Error("Unauthorized", 401);
+            }
+
+            bool response = _requestService.SubmitRequest(submitRequest, username);
+
+            return response ? BaseResponse.Success() : BaseResponse.Error("error");
         }
 
         [HttpGet("client/all")]
         [ValidateToken]
-        public BaseResponse GetRequestPerUser(string? username) 
+        public BaseResponse GetRequestPerUser(string? username)
         {
             if (string.IsNullOrEmpty(username))
             {
-                return BaseResponse.ofSucceeded();
+                return BaseResponse.Success();
             }
-            return _requestService.GetRequestByUsername(username);
+            List<RequestListResponseDto> request = _requestService.GetRequestByUsername(username);
+
+            return BaseResponse.Success(request);
         }
     }
 }

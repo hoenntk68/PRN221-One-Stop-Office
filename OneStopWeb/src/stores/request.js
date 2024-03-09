@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import service from "../plugins/service"
 import { reactive } from 'vue'
+import { mixinMethods, $notify } from '@/utils/variables';
 
 export const useRequestStore = defineStore('request', () => {
 
@@ -15,20 +16,23 @@ export const useRequestStore = defineStore('request', () => {
     })
 
     const getRequestList = () => {
+        mixinMethods.startLoading();
         service.request.getRequestList(
-            {
-            },
+            {},
             (res) => {
-                console.log(res);
                 requestList.data = requestList.data.concat(res);
+                mixinMethods.endLoading();
+                $notify.success(res.message || 'success');
             },
             (err) => {
-                console.log(err);
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
             }
         )
     }
 
     const submitRequest = async () => {
+        mixinMethods.startLoading();
         const formData = new FormData();
         for (const key in requestModel) {
             formData.append(key, requestModel[key]);
@@ -36,10 +40,12 @@ export const useRequestStore = defineStore('request', () => {
         service.request.submitRequest(
             formData,
             (res) => {
-                console.log(res);
+                mixinMethods.endLoading();
+                $notify.success(res.message || 'success');
             },
             (err) => {
-                console.log(err);
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
             }
         )
     }

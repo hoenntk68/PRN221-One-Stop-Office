@@ -6,61 +6,28 @@ namespace OneStopOfficeBE.DTOs.Response
 {
     public class BaseResponse
     {
-        [JsonPropertyName("success")]
-        public bool Success { get; set; }
-
-        [JsonPropertyName("code")]
-        public int Code { get; set; }
-
-        [JsonPropertyName("message")]
-        public string Message { get; set; }
-
-        [JsonPropertyName("data")]
+        public int ResponseCode { get; set; }
+        public bool IsSuccess { get; set; }
+        public string ErrorMessage { get; set; }
         public object Data { get; set; }
 
-        public static BaseResponse ofSucceeded()
+        private BaseResponse(int responseCode, bool isSuccess, string errorMessage, object data)
         {
-            return new BaseResponse
-            {
-                Code = 200,
-                Success = true,
-                Message = ErrorMessageConstant.SUCCESS
-            };
+            ResponseCode = responseCode;
+            IsSuccess = isSuccess;
+            ErrorMessage = errorMessage;
+            Data = data;
         }
 
-        public static BaseResponse ofSucceeded(object data, int responseCode = 200)
+        public static BaseResponse Success(object data = null, int responseCode = 200)
         {
-            return new BaseResponse
-            {
-                Code = responseCode,
-                Success = true,
-                Message = ErrorMessageConstant.SUCCESS,
-                Data =  data
-            };
+            return new BaseResponse(responseCode, true, null, data);
         }
 
-        public static BaseResponse ofFailed(string message, object data)
+        public static BaseResponse Error(string errorMessage, int responseCode = 400)
         {
-            return new BaseResponse
-            {
-                Success = false,
-                Message = message,
-                Data = data
-            };
-        }
-
-        public static BaseResponse ofFailed(string message)
-        {
-            return new BaseResponse
-            {
-                Success = false,
-                Message = message,
-            };
-        }
-
-        public static bool isSucceeded(BaseResponse response)
-        {
-            return response.Code == 200;
+            return new BaseResponse(responseCode, false, errorMessage, null);
         }
     }
+
 }

@@ -23,17 +23,17 @@ namespace OneStopOfficeBE.Services.Impl
             _appSettings = appSettings.CurrentValue;
         }
 
-        public BaseResponse GetInfo(string id)
+        public User GetInfo(string id)
         {
             User? user = _context.Users.SingleOrDefault(u => u.UserId == id);
             if (user == null)
             {
-                return BaseResponse.ofFailed(ErrorMessageConstant.USER_NOT_FOUND);
+                return null;
             }
-            return BaseResponse.ofSucceeded(user);
+            return user;
         }
 
-        public BaseResponse Login(LoginRequestDto loginDto)
+        public LoginResponseDto Login(LoginRequestDto loginDto)
         {
             staff? staff = _context.staff
                 .Include(s => s.User)
@@ -43,7 +43,7 @@ namespace OneStopOfficeBE.Services.Impl
                 );
             if (staff == null)
             {
-                return BaseResponse.ofFailed(ErrorMessageConstant.LOGIN_FAILED);
+                return null;
             }
 
             LoginResponseDto responseData = new LoginResponseDto
@@ -57,20 +57,20 @@ namespace OneStopOfficeBE.Services.Impl
             user.IsTokenValid = true;
             _context.Users.Update(user);
             _context.SaveChanges();
-            return BaseResponse.ofSucceeded(responseData);
+            return responseData;
         }
 
-        public BaseResponse Logout(string id)
+        public bool Logout(string id)
         {
             var user = _context.Users.SingleOrDefault(u => u.UserId == id);
             if (user == null)
             {
-                return BaseResponse.ofFailed(ErrorMessageConstant.UNAUTHORIZED);
+                return false;
             }
             user.IsTokenValid = false;
             _context.Users.Update(user);
             _context.SaveChanges();
-            return BaseResponse.ofSucceeded();
+            return true;
         }
 
         private string GenerateToken(staff staff)

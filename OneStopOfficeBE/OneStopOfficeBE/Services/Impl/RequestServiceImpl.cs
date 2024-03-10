@@ -21,23 +21,24 @@ namespace OneStopOfficeBE.Services.Impl
             _appSettings = appSettings.CurrentValue;
         }
 
-        public bool CancelRequest(string id)
+        public BaseResponse CancelRequest(string id)
         {
             throw new NotImplementedException();
         }
 
-        public List<Request> GetRequest()
+        public BaseResponse GetRequest()
         {
-            return _context.Requests.ToList();
+
+            return BaseResponse.Success(_context.Requests.ToList());
         }
 
-        public bool SubmitRequest(SubmitRequestDto submitRequest, string username)
+        public BaseResponse SubmitRequest(SubmitRequestDto submitRequest, string username)
         {
             try
             {
                 if (submitRequest == null)
                 {
-                    return false;
+                    return BaseResponse.Error("Request data is empty", 400);
                 }
 
 
@@ -57,13 +58,13 @@ namespace OneStopOfficeBE.Services.Impl
                 _context.Requests.Add(request);
                 _context.SaveChanges();
 
-                return true;
+                return BaseResponse.Success();
             }
             catch (Exception ex)
             {
                 string errorMessage = $"An error occurred while processing the request: {ex.GetType()}: {ex.Message}\n{ex.StackTrace}";
 
-                return false;
+                return BaseResponse.Error(errorMessage, 500);
             }
         }
 
@@ -83,7 +84,7 @@ namespace OneStopOfficeBE.Services.Impl
             return attachmentFilePath;
         }
 
-        public List<RequestListResponseDto> GetRequestByUsername(string username)
+        public BaseResponse GetRequestByUsername(string username)
         {
             List<Request> requestList = _context.Requests
                 .Include(r => r.Category)
@@ -94,6 +95,7 @@ namespace OneStopOfficeBE.Services.Impl
                 {
                     Id = item.RequestId,
                     Category = item.Category.CategoryName,
+                    Reason = item.Reason,
                     SubmittedAt = DateTime.Now,
                     ProcessNote = "Ok chờ đi em",
                     ProcessedAt = null,
@@ -101,10 +103,10 @@ namespace OneStopOfficeBE.Services.Impl
                     Status = "Submitted"
                 }
             ).ToList();
-            return responseList;
+            return BaseResponse.Success(responseList);
         }
 
-        public Request UpdateRequest(string id)
+        public BaseResponse UpdateRequest(string id)
         {
             throw new NotImplementedException();
         }

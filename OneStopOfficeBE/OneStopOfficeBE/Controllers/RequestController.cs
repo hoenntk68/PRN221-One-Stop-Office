@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OneStopOfficeBE.Constants;
 using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
-using OneStopOfficeBE.Models;
 using OneStopOfficeBE.Services;
 
 namespace OneStopOfficeBE.Controllers
@@ -22,9 +20,7 @@ namespace OneStopOfficeBE.Controllers
         [HttpGet("request")]
         public BaseResponse Index()
         {
-            List<Request> request = _requestService.GetRequest();
-
-            return BaseResponse.Success(request);
+            return _requestService.GetRequest();
         }
 
         [HttpPost("store")]
@@ -37,9 +33,7 @@ namespace OneStopOfficeBE.Controllers
                 return BaseResponse.Error("Unauthorized", 401);
             }
 
-            bool response = _requestService.SubmitRequest(submitRequest, username);
-
-            return response ? BaseResponse.Success() : BaseResponse.Error("error");
+            return _requestService.SubmitRequest(submitRequest, username);
         }
 
         [HttpGet("client/all")]
@@ -50,9 +44,8 @@ namespace OneStopOfficeBE.Controllers
             {
                 return BaseResponse.Success();
             }
-            List<RequestListResponseDto> request = _requestService.GetRequestByUsername(username);
 
-            return BaseResponse.Success(request);
+            return _requestService.GetRequestByUsername(username);
         }
     }
 }

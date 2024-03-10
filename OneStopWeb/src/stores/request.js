@@ -22,7 +22,6 @@ export const useRequestStore = defineStore('request', () => {
             (res) => {
                 requestList.data = requestList.data.concat(res);
                 mixinMethods.endLoading();
-                $notify.success(res.message || 'success');
             },
             (err) => {
                 mixinMethods.endLoading();

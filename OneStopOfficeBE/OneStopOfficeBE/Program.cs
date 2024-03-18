@@ -56,6 +56,7 @@ internal class Program
         builder.Services.AddScoped<ValidateTokenAttribute>();
         builder.Services.AddScoped<UserService, UserServiceImpl>();
         builder.Services.AddScoped<RequestService, RequestServiceImpl>();
+        builder.Services.AddScoped<CategoryService, CategoryServiceImpl>();
 
         var app = builder.Build();
 

@@ -13,7 +13,6 @@ namespace OneStopOfficeBE.Models
         public int StaffId { get; set; }
         public string UserId { get; set; } = null!;
         public bool IsSuperAdmin { get; set; }
-        public string Password { get; set; } = null!;
 
         public virtual User User { get; set; } = null!;
 

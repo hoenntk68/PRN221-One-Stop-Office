@@ -71,12 +71,12 @@ namespace OneStopOfficeBE.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Requests)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Request__categor__440B1D61");
+                    .HasConstraintName("FK__Request__categor__662B2B3B");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Requests)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Request__user_id__4316F928");
+                    .HasConstraintName("FK__Request__user_id__65370702");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -109,6 +109,11 @@ namespace OneStopOfficeBE.Models
 
                 entity.Property(e => e.IsTokenValid).HasColumnName("is_token_valid");
 
+                entity.Property(e => e.Password)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("password");
+
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(15)
                     .IsUnicode(false)
@@ -128,11 +133,6 @@ namespace OneStopOfficeBE.Models
 
                 entity.Property(e => e.IsSuperAdmin).HasColumnName("is_super_admin");
 
-                entity.Property(e => e.Password)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("password");
-
                 entity.Property(e => e.UserId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -142,17 +142,17 @@ namespace OneStopOfficeBE.Models
                     .WithMany(p => p.staff)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Staff__user_id__36B12243");
+                    .HasConstraintName("FK__Staff__user_id__5CA1C101");
 
                 entity.HasMany(d => d.Categories)
                     .WithMany(p => p.staff)
                     .UsingEntity<Dictionary<string, object>>(
                         "StaffCategory",
-                        l => l.HasOne<Category>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__categ__3B75D760"),
-                        r => r.HasOne<staff>().WithMany().HasForeignKey("StaffId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__staff__3C69FB99"),
+                        l => l.HasOne<Category>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__categ__6166761E"),
+                        r => r.HasOne<staff>().WithMany().HasForeignKey("StaffId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__staff__625A9A57"),
                         j =>
                         {
-                            j.HasKey("StaffId", "CategoryId").HasName("PK__Staff_Ca__4437330741FC6AC6");
+                            j.HasKey("StaffId", "CategoryId").HasName("PK__Staff_Ca__44373307553805C8");
 
                             j.ToTable("Staff_Category");
 

@@ -20,6 +20,7 @@ namespace OneStopOfficeBE.Models
         public string? Email { get; set; }
         public string? Token { get; set; }
         public bool? IsTokenValid { get; set; }
+        public string? Password { get; set; }
 
         public virtual ICollection<Request> Requests { get; set; }
         public virtual ICollection<staff> staff { get; set; }

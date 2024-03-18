@@ -4,6 +4,15 @@ import { useAuthStore } from '@/stores/auth';
 
 const { state, authLogout } = useAuthStore();
 
+import Cookies from 'js-cookie';
+
+if (Cookies.get('access_token')) {
+  state.isLoggedin = true;
+  state.username = Cookies.get('fullname');
+} else {
+  state.isLoggedin = false;
+  state.username = '';
+}
 </script>
 
 <template>

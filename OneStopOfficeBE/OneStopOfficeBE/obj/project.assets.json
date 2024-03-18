@@ -2641,19 +2641,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\laptop hp\\.nuget\\packages\\": {}
+    "C:\\Users\\anlal\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FPT\\Term 7\\PRN221\\Projects\\PRN221-One-Stop-Office\\OneStopOfficeBE\\OneStopOfficeBE\\OneStopOfficeBE.csproj",
+      "projectUniqueName": "C:\\Users\\anlal\\Downloads\\PRN221-One-Stop-Office\\OneStopOfficeBE\\OneStopOfficeBE\\OneStopOfficeBE.csproj",
       "projectName": "OneStopOfficeBE",
-      "projectPath": "D:\\FPT\\Term 7\\PRN221\\Projects\\PRN221-One-Stop-Office\\OneStopOfficeBE\\OneStopOfficeBE\\OneStopOfficeBE.csproj",
-      "packagesPath": "C:\\Users\\laptop hp\\.nuget\\packages\\",
-      "outputPath": "D:\\FPT\\Term 7\\PRN221\\Projects\\PRN221-One-Stop-Office\\OneStopOfficeBE\\OneStopOfficeBE\\obj\\",
+      "projectPath": "C:\\Users\\anlal\\Downloads\\PRN221-One-Stop-Office\\OneStopOfficeBE\\OneStopOfficeBE\\OneStopOfficeBE.csproj",
+      "packagesPath": "C:\\Users\\anlal\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\anlal\\Downloads\\PRN221-One-Stop-Office\\OneStopOfficeBE\\OneStopOfficeBE\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\laptop hp\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\anlal\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2729,11 +2729,21 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Newtonsoft.Json' 6.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-5crp-9r3c-p9vr",
+      "libraryId": "Newtonsoft.Json",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",

@@ -14,7 +14,10 @@
                 <tr>
                     <td class="section-header">Application type:</td>
                     <td class="section-info">
-                        <el-input v-model="requestModel.category" />
+                        <el-select v-model="requestModel.category" placeholder="Select a category">
+                            <el-option v-for="item in cateList.data" :key="item.categoryId" :label="item.categoryName"
+                                :value="item.categoryId" />
+                        </el-select>
                     </td>
                     <td class="section-desc">
                         <p>Phí để xử lý thủ tục này là: 0 (VND)</p>
@@ -50,7 +53,7 @@
 </template>
 <script>
 import { useRequestStore } from '@/stores/request';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 export default {
     setup() {
@@ -66,7 +69,13 @@ export default {
 
         const {
             requestModel,
+            fetchPreRequestData,
+            cateList,
         } = requestStore;
+
+        onMounted(() => {
+            fetchPreRequestData();
+        });
 
         const submitRequest = () => {
             requestStore.submitRequest();
@@ -77,6 +86,8 @@ export default {
             submitRequest,
             fileInputRef,
             handleFileUpload,
+            cateList,
+            fetchPreRequestData,
         }
     }
 }
@@ -88,7 +99,7 @@ export default {
     justify-content: center;
     align-items: center;
     padding: 0;
-    max-width: 1000px;
+    max-width: 1200px;
 
     padding: 4rem;
     border-radius: 2rem;

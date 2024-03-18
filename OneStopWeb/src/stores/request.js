@@ -8,6 +8,9 @@ export const useRequestStore = defineStore('request', () => {
     const requestList = reactive({
         data: [],
     });
+    const cateList = reactive({
+        data: [],
+    });
 
     const requestModel = reactive({
         'category': '',
@@ -21,6 +24,20 @@ export const useRequestStore = defineStore('request', () => {
             {},
             (res) => {
                 requestList.data = requestList.data.concat(res);
+                mixinMethods.endLoading();
+            },
+            (err) => {
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
+            }
+        )
+    }
+    const fetchPreRequestData = () => {
+        mixinMethods.startLoading();
+        service.request.fetchPreRequestData(
+            {},
+            (res) => {
+                cateList.data = res;
                 mixinMethods.endLoading();
             },
             (err) => {
@@ -54,5 +71,7 @@ export const useRequestStore = defineStore('request', () => {
         requestList,
         getRequestList,
         submitRequest,
+        cateList,
+        fetchPreRequestData,
     }
 })

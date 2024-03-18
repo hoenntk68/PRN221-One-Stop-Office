@@ -31,6 +31,21 @@ if (Cookies.get('access_token')) {
         </div>
       </div>
 
+      <nav class="sidebar">
+        <ul>
+          <li>
+            <el-button @click="$router.push({ name: 'submitRequest' })">
+              Nop don
+            </el-button>
+          </li>
+          <li>
+            <el-button @click="$router.push({ name: 'requestList' })">
+              Tra cuu
+            </el-button>
+          </li>
+        </ul>
+      </nav>
+
       <div class="user-profile">
         <RouterLink v-if="!state.isLoggedin" to="/login">Login</RouterLink>
         <div v-else>
@@ -38,6 +53,7 @@ if (Cookies.get('access_token')) {
           <RouterLink @click="authLogout" to="/login">Logout</RouterLink>
         </div>
       </div>
+
     </header>
 
     <div class="main-content">
@@ -61,7 +77,7 @@ if (Cookies.get('access_token')) {
 @import "@/assets/styles/app.scss";
 
 * {
-  // border: 1px solid white;
+  border: 1px solid black;
 }
 
 header {
@@ -115,6 +131,38 @@ header {
     border-left: 1px solid var(--color-border);
   }
 
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 64px;
+    z-index: 10000 !important;
+    width: 200px;
+    height: 100dvh;
+
+    ul {
+      list-style: none;
+      text-decoration: none;
+      padding: 0px;
+
+      li {
+        margin: 8px;
+      }
+    }
+
+    button {
+      background-color: #20C58E;
+      color: #ffffff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      padding: 1.5rem;
+      border-radius: 12px;
+
+      &:hover {
+        filter: brightness(95%);
+      }
+    }
+  }
+
 }
 
 footer {
@@ -130,11 +178,11 @@ footer {
 }
 
 .main-content {
-  width: 100dvw;
+  width: calc(100dvw - 200px);
   height: calc(100dvh - 64px - 48px);
   position: fixed;
   bottom: 48px;
-  left: 0;
+  left: 200px;
 
   overflow: auto;
 }

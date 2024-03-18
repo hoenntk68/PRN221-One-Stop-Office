@@ -1,18 +1,6 @@
 <template lang="">
     <div class="wrapper">
-        <div class="section left">
-            <el-button @click="$router.push({ name: 'submitRequest' })">
-                new request
-            </el-button>
-        </div>
-        <div class="section right">
-            <el-input style="width: 200px">
-
-            </el-input>
-            <el-button @click="$router.push({ name: 'requestList' })">
-                tra cuu
-            </el-button>
-        </div>
+        
     </div>
 </template>
 <script>
@@ -31,6 +19,28 @@ export default {
     align-items: center;
     height: 100%;
 
+    ul {
+        list-style: none;
+        text-decoration: none;
+
+        li {
+            margin: 8px;
+        }
+    }
+
+    button {
+        background-color: #20C58E;
+        color: #ffffff;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding: 1.5rem;
+        border-radius: 12px;
+
+        &:hover {
+            filter: brightness(95%);
+        }
+    }
+
     .section {
         width: 50%;
         height: 100%;
@@ -46,9 +56,7 @@ export default {
             }
         }
 
-        .right {
-            input {}
-        }
+        .right {}
     }
 }
 </style>

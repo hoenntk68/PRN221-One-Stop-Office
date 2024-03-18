@@ -1,5 +1,5 @@
 <template>
-  <div class="dark">
+  <div class="requestTable">
     <table>
       <thead>
         <th>ID</th>
@@ -11,6 +11,7 @@
         <th>Thao tác</th>
       </thead>
       <tr v-for="(item, index) in requestList" :key="index">
+
         <td>{{ item.id }}</td>
         <td>{{ item.category }}</td>
         <td>{{ item.reason }}</td>
@@ -26,5 +27,32 @@
 export default {
   props: { requestList: Object }
 }
+//change to commit
 </script>
-<style></style>
+<style lang="scss" scoped>
+.requestTable {
+  padding: .5rem;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    .item {
+      margin: 1rem;
+    }
+
+    tr {}
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  }
+}
+</style>

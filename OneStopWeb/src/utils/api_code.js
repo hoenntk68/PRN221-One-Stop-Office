@@ -7,7 +7,8 @@ const API_CODE = {
     API_RQ_001: "Request/client/all",
     API_RQ_002: "Request/store",
 
-
+    //cate
+    API_CT_001: "Category/",
 };
 
 export default API_CODE;

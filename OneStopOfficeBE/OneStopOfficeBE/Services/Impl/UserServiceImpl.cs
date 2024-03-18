@@ -39,11 +39,11 @@ namespace OneStopOfficeBE.Services.Impl
                 .Include(s => s.User)
                 .SingleOrDefault(
                  s => s.UserId != null && s.UserId == loginDto.userName
-                && s.Password != null && s.Password == loginDto.password
+                && s.User.Password != null && s.User.Password == loginDto.password
                 );
             if (staff == null)
             {
-                return null;
+                return BaseResponse.Error(ErrorMessageConstant.LOGIN_FAILED);
             }
 
             LoginResponseDto responseData = new LoginResponseDto

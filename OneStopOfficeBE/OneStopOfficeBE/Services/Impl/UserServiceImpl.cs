@@ -35,24 +35,23 @@ namespace OneStopOfficeBE.Services.Impl
 
         public BaseResponse Login(LoginRequestDto loginDto)
         {
-            staff? staff = _context.staff
-                .Include(s => s.User)
+            User? user = _context.Users
+                .Include(u => u.staff)
                 .SingleOrDefault(
                  s => s.UserId != null && s.UserId == loginDto.userName
-                && s.User.Password != null && s.User.Password == loginDto.password
+                && s.Password != null && s.Password == loginDto.password
                 );
-            if (staff == null)
+            if (user == null)
             {
                 return BaseResponse.Error(ErrorMessageConstant.LOGIN_FAILED);
             }
 
             LoginResponseDto responseData = new LoginResponseDto
             {
-                Token = GenerateToken(staff),
+                Token = GenerateToken(user),
                 Username = loginDto.userName,
-                Fullname = staff.User.FullName
+                Fullname = user.FullName
             };
-            var user = staff.User;
             user.Token = responseData.Token;
             user.IsTokenValid = true;
             _context.Users.Update(user);
@@ -73,17 +72,30 @@ namespace OneStopOfficeBE.Services.Impl
             return BaseResponse.Success();
         }
 
-        private string GenerateToken(staff staff)
+        private string GenerateToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(_appSettings.SecretKey);
+            string isAd = "false";
+            string isSuperAd = "false";
+            if (user.staff != null && user.staff.Count > 0)
+            {
+                isAd = "true";
+                List<staff> staffList = user.staff.ToList();
+                if (staffList[0].IsSuperAdmin)
+                {
+                    isSuperAd = "true";
+                }
+            }
+
             var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("IsSuperAdmin", staff.IsSuperAdmin.ToString()),
+                    new Claim("IsAdmin", isAd),
+                    new Claim("IsSuperAdmin", isSuperAd),
                     new Claim("TokenId", Guid.NewGuid().ToString()),
-                    new Claim("Username", staff.User.UserId.ToString()),
+                    new Claim("Username", user.UserId.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddMilliseconds(_appSettings.JwtExpInMs),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)

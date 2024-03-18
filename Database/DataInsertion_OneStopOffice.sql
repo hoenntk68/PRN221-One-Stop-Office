@@ -55,13 +55,16 @@ VALUES
 	-- super admin
     ('000000000000', N'Khoa Thị Văn Học', '2003-07-21', 1, N'Km29, Đại lộ Thăng Long, Thạch Thất, Hà Nội', '+567890123456', 'eikh@example.com');
 
-INSERT INTO Staff([user_id], is_super_admin, [password]) VALUES
-	('111111111111', 0, '123456'),
-	('222222222222', 0, '123456'),
-	('333333333333', 0, '123456'),
-	('444444444444', 0, '123456'),
-	('555555555555', 0, '123456'),
-	('000000000000', 1, '123456');
+-- ALTER TABLE [User] ADD [password] varchar(50); 
+UPDATE [User] SET [password] = '1';
+
+INSERT INTO Staff([user_id], is_super_admin) VALUES
+	('111111111111', 0),
+	('222222222222', 0),
+	('333333333333', 0),
+	('444444444444', 0),
+	('555555555555', 0),
+	('000000000000', 1);
 
 
 INSERT INTO Category(category_name, description)

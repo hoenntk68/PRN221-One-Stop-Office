@@ -24,7 +24,8 @@ CREATE TABLE [User] (
     phone_number VARCHAR(15),
     email VARCHAR(255),
 	token VARCHAR(1000),
-	is_token_valid BIT
+	is_token_valid BIT,
+	[password] varchar(50) 
 );
 
 -- Create the 'staff' table
@@ -32,7 +33,6 @@ CREATE TABLE [Staff] (
     staff_id INT PRIMARY KEY IDENTITY(1,1),
     [user_id] VARCHAR(50) NOT NULL,
     is_super_admin BIT NOT NULL,
-	password VARCHAR(100) NOT NULL,
     FOREIGN KEY ([user_id]) REFERENCES [user]([user_id])
 );
 

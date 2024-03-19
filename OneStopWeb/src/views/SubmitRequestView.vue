@@ -2,14 +2,14 @@
     <div class="wrapper">
         <main class="content">
             <h1>Send an application to Gorverment Administration dept (Gửi đơn cho Phòng quản lý chính phủ)</h1>
-            <p>Lưu ý: V/v gửi đơn/email đến các phòng ban
+            <p><span style="color: #25C690;">Lưu ý: </span>V/v gửi đơn/email đến các phòng ban
                 Bộ phận xử lý đơn sẽ trả lời đơn/ email của công dân trong vòng 48h (trừ đơn rút tiền, đơn phúc tra,
                 chuyển cơ sở...).
                 Để hạn chế SPAM, sẽ giãn thời gian trả lời đơn/email có tính chất SPAM theo nguyên tắc: Khi công dân
                 gửi N đơn/email (N>1) cho cùng một yêu cầu thì thời gian trả lời trong vòng Nx48h.
                 Vì vậy công dân cần cân nhắc trước khi gửi đơn/email với cùng một nội dung để nhận được trả lời/giải
                 quyết nhanh nhất theo quy định.</p>
-            <h2>Account balance (Số dư tài khoản): 1 VNĐ</h2>
+            <h2>Account balance (Số dư tài khoản): <span style="color: #25C690;">1 VNĐ</span></h2>
             <table>
                 <tr>
                     <td class="section-header">Application type:</td>
@@ -20,7 +20,7 @@
                         </el-select>
                     </td>
                     <td class="section-desc">
-                        <p>Phí để xử lý thủ tục này là: 0 (VND)</p>
+                        <p>Phí để xử lý thủ tục này là: <span style="color: #25C690;">0 (VND)</span></p>
                     </td>
                 </tr>
                 <tr>
@@ -35,7 +35,8 @@
                         <input type="file" @change="handleFileUpload" />
                     </td>
                     <td class="section-desc">
-                        <p>Extension File: "xlsx", "pdf", "docx", "doc", "xls", "jpg", "png","zip".</p>
+                        <p>Extension File: <span style="color: #25C690;">"xlsx", "pdf", "docx", "doc", "xls",
+                                "jpg", "png","zip". </span></p>
                     </td>
                 </tr>
                 <tr>

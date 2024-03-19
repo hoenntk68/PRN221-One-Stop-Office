@@ -23,6 +23,24 @@ export const useRequestStore = defineStore('request', () => {
         service.request.getRequestList(
             {},
             (res) => {
+                requestList.data = res;
+                mixinMethods.endLoading();
+            },
+            (err) => {
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
+            }
+        )
+    }
+
+    const loadmore = () => {
+        mixinMethods.startLoading();
+        service.request.getRequestList(
+            {
+                limit: 10,
+                offset: requestList.data.length,
+            },
+            (res) => {
                 requestList.data = requestList.data.concat(res);
                 mixinMethods.endLoading();
             },
@@ -32,6 +50,7 @@ export const useRequestStore = defineStore('request', () => {
             }
         )
     }
+
     const fetchPreRequestData = () => {
         mixinMethods.startLoading();
         service.request.fetchPreRequestData(
@@ -73,5 +92,6 @@ export const useRequestStore = defineStore('request', () => {
         submitRequest,
         cateList,
         fetchPreRequestData,
+        loadmore,
     }
 })

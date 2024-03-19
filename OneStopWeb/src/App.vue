@@ -24,9 +24,7 @@ if (Cookies.get('access_token')) {
         <div class="wrapper">
           <nav>
             <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/about">placeholder</RouterLink>
-            <RouterLink to="/about">placeholder</RouterLink>
-            <RouterLink to="/about">placeholder</RouterLink>
+            <!-- <RouterLink to="/about">placeholder</RouterLink> -->
           </nav>
         </div>
       </div>
@@ -34,14 +32,34 @@ if (Cookies.get('access_token')) {
       <nav class="sidebar">
         <ul>
           <li>
-            <el-button @click="$router.push({ name: 'submitRequest' })">
+            <router-link to="/request-submit">
               Nop don
-            </el-button>
+            </router-link>
           </li>
           <li>
-            <el-button @click="$router.push({ name: 'requestList' })">
+            <router-link to="/request-list">
               Tra cuu
-            </el-button>
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/request-list">
+              Requests
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/request-list">
+              Users
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/request-list">
+              Statistic
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/settings">
+              Settings
+            </router-link>
           </li>
         </ul>
       </nav>
@@ -76,9 +94,9 @@ if (Cookies.get('access_token')) {
 <style lang="scss" scoped>
 @import "@/assets/styles/app.scss";
 
-* {
-  border: 1px solid black;
-}
+// * {
+//   border: 1px solid black !important;
+// }
 
 header {
   max-height: 100vh;
@@ -145,22 +163,28 @@ header {
       padding: 0px;
 
       li {
-        margin: 8px;
+
+        // margin: 8px;
+        display: flex;
+
+        a {
+          background-color: #20C58E;
+          color: #ffffff;
+          font-size: 1.2rem;
+          font-weight: bold;
+          padding: 8px 1.5rem;
+          border-radius: 12px;
+          margin: 8px 0 0 8px;
+          width: 100%;
+
+          &:hover {
+            filter: brightness(95%);
+            color: #20C58E;
+          }
+        }
       }
     }
 
-    button {
-      background-color: #20C58E;
-      color: #ffffff;
-      font-size: 1.5rem;
-      font-weight: bold;
-      padding: 1.5rem;
-      border-radius: 12px;
-
-      &:hover {
-        filter: brightness(95%);
-      }
-    }
   }
 
 }
@@ -178,11 +202,11 @@ footer {
 }
 
 .main-content {
-  width: calc(100dvw - 200px);
+  width: calc(100dvw - 200px - 2rem);
   height: calc(100dvh - 64px - 48px);
   position: fixed;
   bottom: 48px;
-  left: 200px;
+  left: 180px;
 
   overflow: auto;
 }

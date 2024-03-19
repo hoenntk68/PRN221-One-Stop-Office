@@ -15,5 +15,7 @@ namespace OneStopOfficeBE.Services
         BaseResponse CancelRequest(string id);
 
         BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset);
+
+        BaseResponse GetRequestDetail(int id);
     }
 }

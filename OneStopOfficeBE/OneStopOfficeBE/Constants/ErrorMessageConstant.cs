@@ -11,5 +11,8 @@
         public static readonly string LOGIN_FAILED = "Username or password is incorrect.";
 
         public static readonly string USER_NOT_FOUND = "User not found.";
+
+        public static readonly string REQUEST_NOT_FOUND = "Request not found.";
+
     }
 }

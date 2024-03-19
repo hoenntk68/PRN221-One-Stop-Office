@@ -56,5 +56,16 @@ namespace OneStopOfficeBE.Controllers
 
             return _requestService.GetRequestByUsername(user, limit, offset);
         }
+
+        [HttpGet("detail/{id}")]
+        [ValidateToken]
+        public BaseResponse GetRequestDetail(int id = 0)
+        {
+            if (id == 0)
+            {
+                return BaseResponse.Error("Invalid request ID", 400);
+            }
+            return _requestService.GetRequestDetail(id);
+        }
     }
 }

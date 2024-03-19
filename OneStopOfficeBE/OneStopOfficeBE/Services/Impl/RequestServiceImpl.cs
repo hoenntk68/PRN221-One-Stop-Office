@@ -131,5 +131,32 @@ namespace OneStopOfficeBE.Services.Impl
         {
             throw new NotImplementedException();
         }
+
+        public BaseResponse GetRequestDetail(int id)
+        {
+            Request? request = _context.Requests
+                .Include(r => r.User)
+                .Include(r => r.Category)
+                .FirstOrDefault(r => r.RequestId == id);
+            if (request == null)
+            {
+                return BaseResponse.Error(ErrorMessageConstant.REQUEST_NOT_FOUND);
+            }
+            RequestDetailResponse response = new RequestDetailResponse()
+            {
+                RequestId = request.RequestId,
+                UserId = request.UserId,
+                UserFullName = request.User.FullName,
+                CategoryId = request.CategoryId,
+                CategoryName = request.Category.CategoryName,
+                Reason = request.Reason,
+                ProcessNote = request.ProcessNote,
+                Attachment = request.Attachment,
+                CreatedAt = request.CreatedAt,
+                UpdateAt = request.UpdateAt,
+                Status = request.Status
+            };
+            return BaseResponse.Success(response);
+        }
     }
 }

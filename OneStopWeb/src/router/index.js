@@ -29,9 +29,19 @@ const router = createRouter({
       component: () => import('../views/RequestListView.vue')
     },
     {
+      path: '/request/:id',
+      name: 'request-details',
+      component: () => import('../views/RequestDetailView.vue')
+    },
+    {
       path: '/request-submit',
       name: 'submitRequest',
       component: () => import('../views/SubmitRequestView.vue')
+    },
+    {
+      path: '/settings',
+      name: 'setting',
+      component: () => import('../views/SettingView.vue')
     }
   ]
 })

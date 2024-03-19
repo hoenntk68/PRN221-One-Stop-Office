@@ -24,12 +24,45 @@ if (Cookies.get('access_token')) {
         <div class="wrapper">
           <nav>
             <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/about">placeholder</RouterLink>
-            <RouterLink to="/about">placeholder</RouterLink>
-            <RouterLink to="/about">placeholder</RouterLink>
+            <!-- <RouterLink to="/about">placeholder</RouterLink> -->
           </nav>
         </div>
       </div>
+
+      <nav class="sidebar">
+        <ul>
+          <li>
+            <router-link to="/request-submit">
+              Nop don
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/request-list">
+              Tra cuu
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/request-list">
+              Requests
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/request-list">
+              Users
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/request-list">
+              Statistic
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/settings">
+              Settings
+            </router-link>
+          </li>
+        </ul>
+      </nav>
 
       <div class="user-profile">
         <RouterLink v-if="!state.isLoggedin" to="/login">Login</RouterLink>
@@ -38,6 +71,7 @@ if (Cookies.get('access_token')) {
           <RouterLink @click="authLogout" to="/login">Logout</RouterLink>
         </div>
       </div>
+
     </header>
 
     <div class="main-content">
@@ -60,9 +94,9 @@ if (Cookies.get('access_token')) {
 <style lang="scss" scoped>
 @import "@/assets/styles/app.scss";
 
-* {
-  // border: 1px solid white;
-}
+// * {
+//   border: 1px solid black !important;
+// }
 
 header {
   max-height: 100vh;
@@ -115,6 +149,44 @@ header {
     border-left: 1px solid var(--color-border);
   }
 
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 64px;
+    z-index: 10000 !important;
+    width: 200px;
+    height: 100dvh;
+
+    ul {
+      list-style: none;
+      text-decoration: none;
+      padding: 0px;
+
+      li {
+
+        // margin: 8px;
+        display: flex;
+
+        a {
+          background-color: #20C58E;
+          color: #ffffff;
+          font-size: 1.2rem;
+          font-weight: bold;
+          padding: 8px 1.5rem;
+          border-radius: 12px;
+          margin: 8px 0 0 8px;
+          width: 100%;
+
+          &:hover {
+            filter: brightness(95%);
+            color: #20C58E;
+          }
+        }
+      }
+    }
+
+  }
+
 }
 
 footer {
@@ -130,11 +202,11 @@ footer {
 }
 
 .main-content {
-  width: 100dvw;
+  width: calc(100dvw - 200px - 2rem);
   height: calc(100dvh - 64px - 48px);
   position: fixed;
   bottom: 48px;
-  left: 0;
+  left: 180px;
 
   overflow: auto;
 }

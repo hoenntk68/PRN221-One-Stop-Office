@@ -1,4 +1,5 @@
-﻿-- Insert into [user]
+﻿use PRN221_OneStopOffice;
+-- Insert into [user]
 INSERT INTO [User] ([user_id], full_name, dob, gender, address, phone_number, email)
 VALUES
     ('123456789012', N'Nguyễn Thị Ánh', '1995-02-15', 0, N'123 Đường Láng, Hà Nội', '+123456789012', 'nguyenthianh@example.com'),
@@ -104,6 +105,60 @@ VALUES
 	(6,9),
 	(6,10);
 
+
+-- Insert into [Request]
+INSERT INTO [Request] (user_id, category_id, reason, attachment, process_note) VALUES
+	('012345678901', 2, 'no reason', 'no attachment', 'cần xem xét thêm'),
+	('012345678902', 10, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('012345678903', 7, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('012345678904', 2, 'this is reason', 'no attachment', 'lý do chưa chính đáng'),
+	('111111111111', 1, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('123456789012', 9, 'xu ly giay to', 'no attachment', 'cần xem xét thêm'),
+	('123456789013', 10, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('123456789014', 3, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('123456789015', 9, 'no reason', 'no attachment', 'lý do chưa chính đáng'),
+	('123456789016', 9, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('222222222222', 9, 'abcd', 'no attachment', 'cần xem xét thêm'),
+	('234567890123', 4, 'this is reason', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('234567890124', 3, 'no reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('234567890125', 5, 'xu ly giay to', 'no attachment', 'lý do chưa chính đáng'),
+	('234567890126', 9, 'abcd', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('234567890127', 9, 'this is reason', 'no attachment', 'cần xem xét thêm'),
+	('333333333333', 2, 'no reason', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('345678901234', 9, 'xu ly giay to', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('345678901235', 3, 'abcd', 'no attachment', 'lý do chưa chính đáng'),
+	('345678901236', 5, 'this is reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('345678901237', 4, 'no reason', 'no attachment', 'cần xem xét thêm'),
+	('345678901238', 4, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('444444444444', 9, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('456789012345', 2, 'this is reason', 'no attachment', 'lý do chưa chính đáng'),
+	('456789012346', 10, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('456789012347', 6, 'xu ly giay to', 'no attachment', 'cần xem xét thêm'),
+	('456789012348', 7, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('456789012349', 2, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('555555555555', 1, 'no reason', 'no attachment', 'lý do chưa chính đáng'),
+	('567890123456', 2, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('567890123457', 4, 'abcd', 'no attachment', 'cần xem xét thêm'),
+	('567890123458', 6, 'this is reason', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('567890123459', 2, 'no reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('567890123460', 2, 'xu ly giay to', 'no attachment', 'lý do chưa chính đáng'),
+	('678901234567', 2, 'abcd', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('678901234568', 8, 'this is reason', 'no attachment', 'cần xem xét thêm'),
+	('678901234569', 6, 'no reason', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('678901234570', 6, 'xu ly giay to', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('789012345678', 9, 'abcd', 'no attachment', 'lý do chưa chính đáng'),
+	('789012345679', 3, 'this is reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('789012345680', 5, 'no reason', 'no attachment', 'cần xem xét thêm'),
+	('789012345681', 8, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('890123456789', 8, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('890123456790', 3, 'this is reason', 'no attachment', 'lý do chưa chính đáng'),
+	('890123456791', 9, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
+	('890123456792', 7, 'xu ly giay to', 'no attachment', 'cần xem xét thêm'),
+	('901234567890', 5, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý'),
+	('901234567891', 6, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
+	('901234567892', 5, 'no reason', 'no attachment', 'lý do chưa chính đáng'),
+	('901234567893', 6, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+
 -- select * from staff;
 -- select * from [user];
 -- select * from category;
@@ -115,3 +170,7 @@ VALUES
 -- delete from [category];
 -- delete from [staff_category];
 -- delete from [request];
+
+select * from Request where user_id = '111111111111';
+select * from Request where category_id in 
+	(select category_id from Staff_Category where staff_id= 1);

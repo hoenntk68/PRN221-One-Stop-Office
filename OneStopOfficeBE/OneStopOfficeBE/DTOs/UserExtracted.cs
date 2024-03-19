@@ -1,4 +1,4 @@
-﻿namespace OneStopOfficeBE.CustomAttributes
+﻿namespace OneStopOfficeBE.DTOs
 {
     public class UserExtracted
     {

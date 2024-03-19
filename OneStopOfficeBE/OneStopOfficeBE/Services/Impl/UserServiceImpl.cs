@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OneStopOfficeBE.Constants;
-using OneStopOfficeBE.CustomAttributes;
+using OneStopOfficeBE.DTOs;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
 using OneStopOfficeBE.Models;

@@ -5,7 +5,7 @@ using OneStopOfficeBE.DTOs.Response;
 using OneStopOfficeBE.Constants;
 using Microsoft.EntityFrameworkCore;
 using OneStopOfficeBE.Models;
-using OneStopOfficeBE.CustomAttributes;
+using OneStopOfficeBE.DTOs;
 
 namespace OneStopOfficeBE.Services.Impl
 {
@@ -41,7 +41,6 @@ namespace OneStopOfficeBE.Services.Impl
                 {
                     return BaseResponse.Error("Request data is empty", 400);
                 }
-
 
                 int category = submitRequest.category;
                 string reason = submitRequest.reason;
@@ -88,14 +87,31 @@ namespace OneStopOfficeBE.Services.Impl
         public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset)
         {
             string? username = user?.Username;
-            //co id => 
+            List<Request> requestList = new List<Request>();
+            switch (user?.IsAdmin)
+            {
+                case false:
+                    requestList = _context.Requests
+                        .Include(r => r.Category)
+                        .ThenInclude(c => c.staff)
+                        .Where(r => r.UserId == username)
+                        .Skip(offset)
+                        .Take(limit)
+                        .OrderBy(r => r.RequestId)
+                        .ToList();
+                    break;
+                case true:
+                    requestList = _context.Requests
+                        .Include(r => r.Category)
+                        .ThenInclude(c => c.staff)
+                        .Where(r => r.UserId != username && r.Category.staff.Any(s => s.UserId == username))
+                        .Skip(offset)
+                        .Take(limit)
+                        .OrderBy(r => r.RequestId)
+                        .ToList();
+                    break;
 
-            List<Request> requestList = _context.Requests
-                .Include(r => r.Category)
-                .Where(r => r.UserId == username)
-                .Skip(offset)
-                .Take(limit)
-                .ToList();
+            }
             List<RequestListResponseDto> responseList = requestList.Select(item =>
                 new RequestListResponseDto
                 {

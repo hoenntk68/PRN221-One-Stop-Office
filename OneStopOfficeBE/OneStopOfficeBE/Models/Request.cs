@@ -10,6 +10,10 @@ namespace OneStopOfficeBE.Models
         public int? CategoryId { get; set; }
         public string? Reason { get; set; }
         public string? Attachment { get; set; }
+        public string? ProcessNote { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
+        public string? Status { get; set; }
 
         public virtual Category? Category { get; set; }
         public virtual User? User { get; set; }

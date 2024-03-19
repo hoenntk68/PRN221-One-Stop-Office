@@ -59,9 +59,27 @@ namespace OneStopOfficeBE.Models
 
                 entity.Property(e => e.CategoryId).HasColumnName("category_id");
 
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("created_at")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.Reason)
                     .HasColumnType("text")
                     .HasColumnName("reason");
+
+                entity.Property(e => e.UpdateAt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("update_at")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Status)
+                    .HasColumnType("text")
+                    .HasColumnName("status");
+
+                entity.Property(e => e.ProcessNote)
+                    .HasColumnType("text")  
+                    .HasColumnName("process_note");
 
                 entity.Property(e => e.UserId)
                     .HasMaxLength(50)
@@ -71,12 +89,12 @@ namespace OneStopOfficeBE.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Requests)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Request__categor__662B2B3B");
+                    .HasConstraintName("FK__Request__categor__7B264821");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Requests)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Request__user_id__65370702");
+                    .HasConstraintName("FK__Request__user_id__7A3223E8");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -142,17 +160,17 @@ namespace OneStopOfficeBE.Models
                     .WithMany(p => p.staff)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Staff__user_id__5CA1C101");
+                    .HasConstraintName("FK__Staff__user_id__6FB49575");
 
                 entity.HasMany(d => d.Categories)
                     .WithMany(p => p.staff)
                     .UsingEntity<Dictionary<string, object>>(
                         "StaffCategory",
-                        l => l.HasOne<Category>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__categ__6166761E"),
-                        r => r.HasOne<staff>().WithMany().HasForeignKey("StaffId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__staff__625A9A57"),
+                        l => l.HasOne<Category>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__categ__74794A92"),
+                        r => r.HasOne<staff>().WithMany().HasForeignKey("StaffId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__staff__756D6ECB"),
                         j =>
                         {
-                            j.HasKey("StaffId", "CategoryId").HasName("PK__Staff_Ca__44373307553805C8");
+                            j.HasKey("StaffId", "CategoryId").HasName("PK__Staff_Ca__44373307E74F64A1");
 
                             j.ToTable("Staff_Category");
 

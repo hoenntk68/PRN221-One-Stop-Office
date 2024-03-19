@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Options;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
-using OneStopOfficeBE.Models;
 using OneStopOfficeBE.Constants;
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore;
+using OneStopOfficeBE.Models;
+using OneStopOfficeBE.CustomAttributes;
 
 namespace OneStopOfficeBE.Services.Impl
 {
@@ -32,8 +32,9 @@ namespace OneStopOfficeBE.Services.Impl
             return BaseResponse.Success(_context.Requests.ToList());
         }
 
-        public BaseResponse SubmitRequest(SubmitRequestDto submitRequest, string username)
+        public BaseResponse SubmitRequest(SubmitRequestDto submitRequest, UserExtracted? user)
         {
+            string? username = user?.Username;
             try
             {
                 if (submitRequest == null)
@@ -84,11 +85,14 @@ namespace OneStopOfficeBE.Services.Impl
             return attachmentFilePath;
         }
 
-        public BaseResponse GetRequestByUsername(string username)
+        public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset)
         {
+            string? username = user?.Username;
             List<Request> requestList = _context.Requests
                 .Include(r => r.Category)
                 .Where(r => r.UserId == username)
+                .Skip(offset)
+                .Take(limit)
                 .ToList();
             List<RequestListResponseDto> responseList = requestList.Select(item =>
                 new RequestListResponseDto
@@ -96,10 +100,9 @@ namespace OneStopOfficeBE.Services.Impl
                     Id = item.RequestId,
                     Category = item.Category.CategoryName,
                     Reason = item.Reason,
-                    SubmittedAt = DateTime.Now,
-                    ProcessNote = "Ok chờ đi em",
+                    ProcessNote = item.ProcessNote,
                     ProcessedAt = null,
-                    File = "",
+                    File = item.Attachment,
                     Status = "Submitted"
                 }
             ).ToList();

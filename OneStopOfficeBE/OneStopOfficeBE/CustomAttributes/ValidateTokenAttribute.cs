@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using OneStopOfficeBE.Controllers;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 
 namespace OneStopOfficeBE.CustomAttributes
 {
@@ -22,10 +25,10 @@ namespace OneStopOfficeBE.CustomAttributes
                     // Extract the username claim
                     var username = token.Claims.FirstOrDefault(claim => claim.Type == "Username")?.Value;
 
-                    // Set the username in the request's Items collection
-                    //context.HttpContext.Items["username"] = username;
                     PRN221_OneStopOfficeContext _context = new PRN221_OneStopOfficeContext();
-                    var user = _context.Users.FirstOrDefault(u => u.UserId == username);
+                    User? user = _context.Users
+                        .Include(u => u.staff)
+                        .FirstOrDefault(u => u.UserId == username);
                     if (user == null)
                     {
                         context.Result = new UnauthorizedResult();
@@ -36,14 +39,32 @@ namespace OneStopOfficeBE.CustomAttributes
                         context.Result = new UnauthorizedResult();
                         return;
                     }
-                    if (!(bool)user.IsTokenValid)
+                    if (user.IsTokenValid != null && !(bool)user.IsTokenValid)
                     {
                         context.Result = new UnauthorizedResult();
                         return;
                     }
-                    var isSuperAdmin = token.Claims.FirstOrDefault(claim => claim.Type == "IsSuperAdmin")?.Value;
-                    context.ActionArguments["username"] = username;
-                    context.ActionArguments["isSuperAdmin"] = isSuperAdmin == "True";
+
+                    //context.ActionArguments["username"] = username;
+                    bool isAd = false;
+                    bool isSuperAd = false;
+                    if (user.staff != null)
+                    {
+                        List<staff> staffList = user.staff.ToList();
+                        if (staffList.Count > 0)
+                        {
+                            isAd = true;
+                            isSuperAd = staffList[0].IsSuperAdmin;
+                        }
+                    }
+
+                    UserExtracted userExtracted = new UserExtracted()
+                    {
+                        Username = user.UserId,
+                        IsAdmin = isAd,
+                        IsSuperAdmin = isSuperAd,
+                    };
+                    context.ActionArguments["jsonClaims"] = JsonSerializer.Serialize(userExtracted);
 
                 }
                 catch (Exception ex)

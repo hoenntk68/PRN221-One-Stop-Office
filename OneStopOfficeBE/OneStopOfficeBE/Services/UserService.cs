@@ -1,4 +1,5 @@
-﻿using OneStopOfficeBE.DTOs.Request;
+﻿using OneStopOfficeBE.CustomAttributes;
+using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
 
 namespace OneStopOfficeBE.Services
@@ -7,6 +8,6 @@ namespace OneStopOfficeBE.Services
     {
         BaseResponse GetInfo(string id);
         BaseResponse Login(LoginRequestDto loginRequest);
-        BaseResponse Logout(string username);
+        BaseResponse Logout(UserExtracted? user);
     }
 }

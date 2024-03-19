@@ -59,6 +59,10 @@ CREATE TABLE Request (
     category_id INT,
     reason TEXT,
     attachment TEXT,
+	process_note TEXT,
+	status TEXT,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	update_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY ([user_id]) REFERENCES [user]([user_id]),
     FOREIGN KEY (category_id) REFERENCES category(category_id)
 );

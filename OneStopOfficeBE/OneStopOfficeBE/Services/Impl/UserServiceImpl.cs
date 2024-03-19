@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OneStopOfficeBE.Constants;
+using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
 using OneStopOfficeBE.Models;
@@ -59,9 +60,10 @@ namespace OneStopOfficeBE.Services.Impl
             return BaseResponse.Success(responseData);
         }
 
-        public BaseResponse Logout(string id)
+        public BaseResponse Logout(UserExtracted? userExtracted)
         {
-            var user = _context.Users.SingleOrDefault(u => u.UserId == id);
+            string? username = userExtracted?.Username;
+            var user = _context.Users.SingleOrDefault(u => u.UserId == username);
             if (user == null)
             {
                 return BaseResponse.Error("User not found", 404);
@@ -96,6 +98,7 @@ namespace OneStopOfficeBE.Services.Impl
                     new Claim("IsSuperAdmin", isSuperAd),
                     new Claim("TokenId", Guid.NewGuid().ToString()),
                     new Claim("Username", user.UserId.ToString()),
+                    new Claim("FullName", user.FullName),
                 }),
                 Expires = DateTime.UtcNow.AddMilliseconds(_appSettings.JwtExpInMs),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)

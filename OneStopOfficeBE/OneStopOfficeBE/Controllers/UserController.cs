@@ -4,6 +4,9 @@ using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
 using OneStopOfficeBE.Services;
+using OneStopOfficeBE.Utils;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 
 namespace OneStopOfficeBE.Controllers
 {
@@ -12,7 +15,6 @@ namespace OneStopOfficeBE.Controllers
     public class UserController : ControllerBase
     {
         private UserService _userService;
-
         public UserController(UserService userService)
         {
             _userService = userService;
@@ -34,12 +36,13 @@ namespace OneStopOfficeBE.Controllers
 
         }
 
+        [ValidateToken]
         [HttpGet("Logout")]
         [Authorize]
-        [ValidateToken]
-        public BaseResponse Logout(string? username)
+        public BaseResponse Logout(string? jsonClaims)
         {
-            return _userService.Logout(username);
+            UserExtracted user = JwtHelper.extractUser(jsonClaims);
+            return _userService.Logout(user);
         }
     }
 }

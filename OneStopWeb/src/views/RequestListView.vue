@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <RequestTable :requestList="anything"></RequestTable>
-    <button @click="getRequestList">Get Request List</button>
+  <div class="requestList">
+    <RequestTable :requestList="request"></RequestTable>
+    <div>
+      <button @click="loadmore">loadmore</button>
+    </div>
   </div>
 </template>
 <script>
@@ -10,20 +12,20 @@ import { useRequestStore } from '@/stores/request.js'
 import { computed, onMounted } from 'vue'
 export default {
   setup() {
-    // Call API get request list
     const requestStore = useRequestStore()
 
-    const { getRequestList } = requestStore
+    const { getRequestList, loadmore } = requestStore
 
-    const anything = computed(() => requestStore.requestList.data)
+    const request = computed(() => requestStore.requestList.data)
 
     onMounted(async () => {
-      await getRequestList()
+      getRequestList()
     })
 
     return {
       getRequestList,
-      anything
+      loadmore,
+      request
     }
   },
   components: { RequestTable }

@@ -123,7 +123,7 @@ namespace OneStopOfficeBE.Services.Impl
                     ProcessNote = item.ProcessNote,
                     ProcessedAt = null,
                     File = item.Attachment,
-                    Status = "Submitted"
+                    Status = item.Status,
                 }
             ).ToList();
             return BaseResponse.Success(responseList);

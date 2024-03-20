@@ -47,11 +47,26 @@ namespace OneStopOfficeBE.Services.Impl
                 return BaseResponse.Error(ErrorMessageConstant.LOGIN_FAILED);
             }
 
+            bool isAd = false;
+            bool isSuperAd = false;
+
+            if (user.staff.Count > 0)
+            {
+                isAd = true;
+                if (user.staff.First().IsSuperAdmin)
+                {
+                    isSuperAd = true;
+                }
+            }
+
+
             LoginResponseDto responseData = new LoginResponseDto
             {
                 Token = GenerateToken(user),
                 Username = loginDto.userName,
-                Fullname = user.FullName
+                Fullname = user.FullName,
+                IsAdmin = isAd,
+                IsSuperAdmin = isSuperAd,  
             };
             user.Token = responseData.Token;
             user.IsTokenValid = true;

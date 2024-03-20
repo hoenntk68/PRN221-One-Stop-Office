@@ -25,7 +25,7 @@ CREATE TABLE [User] (
     email VARCHAR(255),
 	token VARCHAR(1000),
 	is_token_valid BIT,
-	[password] varchar(50) 
+	[password] VARCHAR(50) 
 );
 
 -- Create the 'staff' table
@@ -57,10 +57,10 @@ CREATE TABLE Request (
     request_id INT PRIMARY KEY IDENTITY(1,1),
     [user_id] VARCHAR(50),
     category_id INT,
-    reason TEXT,
-    attachment TEXT,
-	process_note TEXT,
-	status TEXT,
+    reason VARCHAR(500),
+    attachment VARCHAR(500),
+	process_note VARCHAR(500),
+	[status] VARCHAR(50),
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	update_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY ([user_id]) REFERENCES [user]([user_id]),

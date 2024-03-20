@@ -9,5 +9,8 @@ namespace OneStopOfficeBE.DTOs.Request
 
         [JsonPropertyName("status")]
         public string Status { get; set; }
+
+        [JsonPropertyName("processNote")]
+        public string? ProcessNote { get; set; } 
     }
 }

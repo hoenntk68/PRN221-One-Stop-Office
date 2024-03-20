@@ -158,6 +158,7 @@ INSERT INTO [Request] (user_id, category_id, reason, attachment, process_note) V
 	('901234567891', 6, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
 	('901234567892', 5, 'no reason', 'no attachment', 'lý do chưa chính đáng'),
 	('901234567893', 6, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+update [Request] set status = 'Submitted' where status is null;
 
 -- select * from staff;
 -- select * from [user];
@@ -174,3 +175,5 @@ INSERT INTO [Request] (user_id, category_id, reason, attachment, process_note) V
 select * from Request where user_id = '111111111111';
 select * from Request where category_id in 
 	(select category_id from Staff_Category where staff_id= 1);
+
+alter table [Request] alter column [status] varchar(50);

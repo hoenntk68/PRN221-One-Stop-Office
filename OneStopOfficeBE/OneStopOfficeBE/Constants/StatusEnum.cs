@@ -2,6 +2,7 @@
 {
     public enum StatusEnum
     {
+        Submitted,
         Pending,
         Approved,
         Rejected,

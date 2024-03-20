@@ -54,7 +54,7 @@ namespace OneStopOfficeBE.Models
                 entity.Property(e => e.RequestId).HasColumnName("request_id");
 
                 entity.Property(e => e.Attachment)
-                    .HasColumnType("text")
+                    .HasMaxLength(500)
                     .HasColumnName("attachment");
 
                 entity.Property(e => e.CategoryId).HasColumnName("category_id");
@@ -65,7 +65,7 @@ namespace OneStopOfficeBE.Models
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Reason)
-                    .HasColumnType("text")
+                    .HasMaxLength(500)
                     .HasColumnName("reason");
 
                 entity.Property(e => e.UpdateAt)
@@ -74,11 +74,11 @@ namespace OneStopOfficeBE.Models
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Status)
-                    .HasColumnType("text")
+                    .HasMaxLength(50)
                     .HasColumnName("status");
 
                 entity.Property(e => e.ProcessNote)
-                    .HasColumnType("text")  
+                    .HasColumnType("text")
                     .HasColumnName("process_note");
 
                 entity.Property(e => e.UserId)

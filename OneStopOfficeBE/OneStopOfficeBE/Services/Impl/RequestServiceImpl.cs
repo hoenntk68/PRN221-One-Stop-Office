@@ -53,7 +53,8 @@ namespace OneStopOfficeBE.Services.Impl
                     CategoryId = category,
                     UserId = username,
                     Reason = reason,
-                    Attachment = attachmentFilePath
+                    Attachment = attachmentFilePath,
+                    Status = StatusEnum.Submitted.ToString(),
                 };
 
                 _context.Requests.Add(request);
@@ -85,7 +86,7 @@ namespace OneStopOfficeBE.Services.Impl
             return attachmentFilePath;
         }
 
-        public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset)
+        public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset, string status, string sortBy = "created_at")
         {
             string? username = user?.Username;
             List<Request> requestList = new List<Request>();
@@ -95,20 +96,20 @@ namespace OneStopOfficeBE.Services.Impl
                     requestList = _context.Requests
                         .Include(r => r.Category)
                         .ThenInclude(c => c.staff)
-                        .Where(r => r.UserId == username)
+                        .Where(r => r.UserId == username && r.Status == status)
                         .Skip(offset)
                         .Take(limit)
-                        .OrderBy(r => r.RequestId)
+                        .OrderBy(r => r.CreatedAt)
                         .ToList();
                     break;
                 case true:
                     requestList = _context.Requests
                         .Include(r => r.Category)
                         .ThenInclude(c => c.staff)
-                        .Where(r => r.UserId != username && r.Category.staff.Any(s => s.UserId == username))
+                        .Where(r => r.UserId != username && r.Category.staff.Any(s => s.UserId == username) && r.Status == status)
                         .Skip(offset)
                         .Take(limit)
-                        .OrderBy(r => r.RequestId)
+                        .OrderBy(r => r.CreatedAt)
                         .ToList();
                     break;
 
@@ -194,6 +195,9 @@ namespace OneStopOfficeBE.Services.Impl
                 return BaseResponse.Error(ErrorMessageConstant.INVALID_STATUS);
             }
             requestFound.Status = request.Status;
+            // update process note if user is admin
+            requestFound.ProcessNote = (bool)user.IsAdmin ? request.ProcessNote : requestFound.ProcessNote;
+            requestFound.UpdateAt = DateTime.UtcNow;
             _context.Requests.Update(requestFound);
             _context.SaveChanges();
             return BaseResponse.Success(new Request()

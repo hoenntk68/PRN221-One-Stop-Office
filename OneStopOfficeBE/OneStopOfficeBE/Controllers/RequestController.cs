@@ -45,7 +45,9 @@ namespace OneStopOfficeBE.Controllers
         public BaseResponse GetRequestPerUser(
             string? jsonClaims,
             [FromQuery] int limit = 10,
-            [FromQuery] int offset = 0
+            [FromQuery] int offset = 0,
+            [FromQuery] string? status = "Submitted",
+            [FromQuery] string? sortBy = "created_at"
         )
         {
             UserExtracted? user = JwtHelper.extractUser(jsonClaims);
@@ -54,7 +56,7 @@ namespace OneStopOfficeBE.Controllers
                 return BaseResponse.Error("Unauthorized", 401);
             }
 
-            return _requestService.GetRequestByUsername(user, limit, offset);
+            return _requestService.GetRequestByUsername(user, limit, offset, status, sortBy);
         }
 
         [HttpGet("detail/{id}")]

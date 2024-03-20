@@ -67,5 +67,17 @@ namespace OneStopOfficeBE.Controllers
             }
             return _requestService.GetRequestDetail(id);
         }
+
+        [HttpPost("update")]
+        [ValidateToken]
+        public BaseResponse UpdateRequestStatus(UpdateStatusRequest request, string? jsonClaims)
+        {
+            UserExtracted? user = JwtHelper.extractUser(jsonClaims);
+            if (user == null)
+            {
+                return BaseResponse.Error("Unauthorized", 401);
+            }
+            return _requestService.UpdateRequestStatus(request, user);
+        }
     }
 }

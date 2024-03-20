@@ -17,5 +17,7 @@ namespace OneStopOfficeBE.Services
         BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset);
 
         BaseResponse GetRequestDetail(int id);
+
+        BaseResponse UpdateRequestStatus(UpdateStatusRequest request, UserExtracted? user);
     }
 }

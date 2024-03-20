@@ -6,6 +6,7 @@ using OneStopOfficeBE.Constants;
 using Microsoft.EntityFrameworkCore;
 using OneStopOfficeBE.Models;
 using OneStopOfficeBE.DTOs;
+using OneStopOfficeBE.Utils;
 
 namespace OneStopOfficeBE.Services.Impl
 {
@@ -157,6 +158,49 @@ namespace OneStopOfficeBE.Services.Impl
                 Status = request.Status
             };
             return BaseResponse.Success(response);
+        }
+
+        public BaseResponse UpdateRequestStatus(UpdateStatusRequest request, UserExtracted? user)
+        {
+            Request? requestFound = null;
+            if ((bool)user.IsAdmin)
+            {
+                // check if user is entitled to change request status
+                requestFound = _context.Requests
+                        .Include(r => r.Category)
+                        .ThenInclude(c => c.staff)
+                        .Where(r => r.UserId != user.Username && r.Category.staff.Any(s => s.UserId == user.Username))
+                        .FirstOrDefault(r => r.RequestId == request.RequestId);
+                if (requestFound == null)
+                {
+                    return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED, 401);
+                }
+            }
+            else
+            {
+                requestFound = _context.Requests
+                    .FirstOrDefault(r => request.RequestId == r.RequestId && r.UserId == user.Username);
+                if (requestFound == null)
+                {
+                    return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED, 401);
+                }
+                if (request.Status != StatusEnum.Cancelled.ToString())
+                {
+                    return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED, 401);
+                }
+            }
+            if (!EnumHelper.IsValidStatus(request.Status))
+            {
+                return BaseResponse.Error(ErrorMessageConstant.INVALID_STATUS);
+            }
+            requestFound.Status = request.Status;
+            _context.Requests.Update(requestFound);
+            _context.SaveChanges();
+            return BaseResponse.Success(new Request()
+            {
+                RequestId = request.RequestId,
+                Status = request.Status,
+            });
         }
     }
 }

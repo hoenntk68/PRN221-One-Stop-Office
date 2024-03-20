@@ -14,5 +14,7 @@
 
         public static readonly string REQUEST_NOT_FOUND = "Request not found.";
 
+        public static readonly string INVALID_STATUS = "Status is invalid";
+
     }
 }

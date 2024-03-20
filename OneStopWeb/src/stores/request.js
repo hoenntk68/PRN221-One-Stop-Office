@@ -8,8 +8,15 @@ export const useRequestStore = defineStore('request', () => {
     const requestList = reactive({
         data: [],
     });
+    const requestDetail = reactive({
+        data: [],
+    });
     const cateList = reactive({
         data: [],
+    });
+    const requestState = reactive({
+        currentRequestId: 0,
+        ProcessNote: '',
     });
 
     const requestModel = reactive({
@@ -42,6 +49,22 @@ export const useRequestStore = defineStore('request', () => {
             },
             (res) => {
                 requestList.data = requestList.data.concat(res);
+                mixinMethods.endLoading();
+            },
+            (err) => {
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
+            }
+        )
+    }
+
+    const getRequestDetail = (id) => {
+        mixinMethods.startLoading();
+        service.request.getRequestDetail(
+            id,
+            {},
+            (res) => {
+                requestDetail.data = res;
                 mixinMethods.endLoading();
             },
             (err) => {
@@ -85,13 +108,36 @@ export const useRequestStore = defineStore('request', () => {
         )
     }
 
+    const updateRequestStatus = async (status) => {
+        mixinMethods.startLoading();
+        service.request.updateRequest(
+            {
+                "RequestId": requestState.currentRequestId,
+                "Status": status,
+            },
+            (res) => {
+                mixinMethods.endLoading();
+                $notify.success(res.message || 'success');
+                getRequestList();
+            },
+            (err) => {
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
+            }
+        )
+    }
+
     return {
         requestModel,
         requestList,
+        requestDetail,
         getRequestList,
         submitRequest,
         cateList,
         fetchPreRequestData,
         loadmore,
+        getRequestDetail,
+        requestState,
+        updateRequestStatus,
     }
 })

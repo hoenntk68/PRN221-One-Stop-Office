@@ -176,4 +176,4 @@ select * from Request where user_id = '111111111111';
 select * from Request where category_id in 
 	(select category_id from Staff_Category where staff_id= 1);
 
-alter table [Request] alter column [status] varchar(50);
+-- alter table [Request] alter column [status] varchar(50);

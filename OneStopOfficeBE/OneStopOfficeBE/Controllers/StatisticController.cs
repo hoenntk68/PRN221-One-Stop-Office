@@ -13,7 +13,7 @@ namespace OneStopOfficeBE.Controllers
         {
             _statisticService = statisticService;
         }
-        
+
         [HttpGet("request-per-category")]
         public BaseResponse GetRequestPerCategory()
         {
@@ -21,8 +21,15 @@ namespace OneStopOfficeBE.Controllers
         }
 
         [HttpGet("efficient-staffs")]
-        public BaseResponse GetEfficientStaffs(int? take = 3) {
+        public BaseResponse GetEfficientStaffs(int? take = 3)
+        {
             return _statisticService.EfficientStaffs(take);
+        }
+
+        [HttpGet("general-stats")]
+        public BaseResponse GeneralStats()
+        {
+            return _statisticService.GeneralStats();
         }
     }
 }

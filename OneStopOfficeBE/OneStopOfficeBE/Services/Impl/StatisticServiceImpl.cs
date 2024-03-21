@@ -42,5 +42,18 @@ namespace OneStopOfficeBE.Services.Impl
             return BaseResponse.Success(list);
 
         }
+
+        public BaseResponse GeneralStats()
+        {
+            GeneralStatsDto stats = new GeneralStatsDto()
+            {
+                RequestCount = _context.Requests.Count(),
+                UserSystemCount = _context.Users.Count(),
+                AdminCount = _context.Users.Where(u => u.IsAdmin).Count(),
+                ClientCount = _context.Users.Where(u => !u.IsAdmin).Count(),
+                CategoryCount = _context.Categories.Count()
+            };
+            return BaseResponse.Success(stats);
+        }
     }
 }

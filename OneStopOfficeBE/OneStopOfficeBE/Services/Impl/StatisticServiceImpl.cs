@@ -37,8 +37,11 @@ namespace OneStopOfficeBE.Services.Impl
                 RequestCount = u.RequestAssignedToNavigations.Count
             })
             .OrderByDescending(item => item.RequestCount)
-            .Take((int)number)
             .ToList();
+            if (number != null)
+            {
+                list = list.Take((int)number).ToList();
+            }
             return BaseResponse.Success(list);
 
         }

@@ -46,7 +46,11 @@ export default {
         const router = useRouter();
         const { state } = useAuthStore();
 
-        const { getRequestDetail, requestDetail } = useRequestStore();
+        const {
+            getRequestDetail,
+            requestDetail,
+            // updateRequestStatus,
+        } = useRequestStore();
 
         const downloadAttachment = (id) => {
             let baseURL = import.meta.env.VITE_BASE_URL;

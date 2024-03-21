@@ -15,6 +15,8 @@ export const useAuthStore = defineStore('auth', () => {
     const state = reactive({
         isLoggedin: false,
         username: '',
+        isAdmin: false,
+        isSuperAdmin: false,
     })
 
     const authLogin = () => {
@@ -25,27 +27,29 @@ export const useAuthStore = defineStore('auth', () => {
                 "password": credential.password,
             },
             (res) => {
-                Cookies.set('access_token', res.token, { expires: 7 });
-                Cookies.set('username', res.username, { expires: 7 });
-                Cookies.set('fullname', res.fullname, { expires: 7 });
-                router.push('/');
+                for (let key in res) {
+                    Cookies.set(key, res[key], { expires: 7 });
+                }
+                location.href = '/';
                 mixinMethods.endLoading();
-                state.isLoggedin = !!Cookies.get('access_token');
+                state.isLoggedin = !!Cookies.get('token');
                 state.username = Cookies.get('fullname');
             },
             (err) => {
                 mixinMethods.endLoading();
-                state.isLoggedin = !!Cookies.get('access_token');
+                state.isLoggedin = !!Cookies.get('token');
                 $notify.error(err.responseCode || 'error');
             }
         )
     }
 
     const authLogout = () => {
-        Cookies.remove('access_token');
+        Cookies.remove('token');
         Cookies.remove('fullname');
         Cookies.remove('username');
-        state.isLoggedin = !!Cookies.get('access_token');
+        Cookies.remove('isAdmin');
+        Cookies.remove('isSuperAdmin');
+        state.isLoggedin = !!Cookies.get('token');
         state.username = Cookies.get('fullname') || '';
     }
 

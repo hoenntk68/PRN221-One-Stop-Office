@@ -1,4 +1,5 @@
-﻿using OneStopOfficeBE.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using OneStopOfficeBE.DTOs;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
 
@@ -9,6 +10,8 @@ namespace OneStopOfficeBE.Services
         BaseResponse GetRequest();
 
         BaseResponse SubmitRequest(SubmitRequestDto submitRequest, UserExtracted? user);
+
+        IActionResult DownloadAttachment(int id);
 
         BaseResponse UpdateRequest(string id);
 

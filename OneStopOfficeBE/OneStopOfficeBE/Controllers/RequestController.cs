@@ -40,6 +40,12 @@ namespace OneStopOfficeBE.Controllers
             return _requestService.SubmitRequest(submitRequest, user);
         }
 
+        [HttpGet("{id}/download")]
+        public IActionResult DownloadAttachment(int id)
+        {
+            return _requestService.DownloadAttachment(id);
+        }
+
         [HttpGet("client/all")]
         [ValidateToken]
         public BaseResponse GetRequestPerUser(

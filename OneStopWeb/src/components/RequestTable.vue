@@ -24,9 +24,9 @@
       <span>{{ item.creationTime }}</span>
       <span>{{ item.status }}</span>
       <div>
-        <el-button type="info" @click="navigateDetails(item.id)">info</el-button>
-        <el-button v-if="item.status != 'approved'" type="primary" @click="handleEdit(index)">Edit</el-button>
-        <el-button v-if="item.status != 'approved'" type="danger" @click="handleDelete(index)">Cancel</el-button>
+        <el-button type="primary" @click="navigateDetails(item.id)">info</el-button>
+        <el-button v-if="item.status != 'approved'" type="danger"
+          @click="handleDelete(item.id, 'Cancelled')">Cancel</el-button>
       </div>
     </div>
   </div>
@@ -34,10 +34,14 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useRequestStore } from '@/stores/request';
 
 export default {
   props: { requestList: Object },
   setup() {
+    const requestStore = useRequestStore();
+    const { updateRequestStatus, requestState } = requestStore;
+
     const search = ref('');
     const router = useRouter();
 
@@ -49,8 +53,9 @@ export default {
       console.log('edit', index);
     }
 
-    const handleDelete = (index) => {
-      console.log('delete', index);
+    const handleDelete = (id, status) => {
+      requestStore.requestState.currentRequestId = id;
+      updateRequestStatus(status);
     }
 
 
@@ -58,7 +63,8 @@ export default {
       search,
       navigateDetails,
       handleEdit,
-      handleDelete
+      handleDelete,
+      requestState,
     };
   }
 

@@ -5,21 +5,25 @@
         </el-button>
         <div class="rDetails">
             <main class="content">
-                <h1>{{ request.category }}</h1>
+                <h1>{{ requestDetail.data.categoryName }}</h1>
                 <div class="formRequest">
                     <p>kính gửi cơ quan chính phủ</p>
-                    <p>Tôi: {{ state.username || '-' }} </p>
+                    <p>Tôi: {{ requestDetail.data.userFullName || '-' }} </p>
                     <p>Viết đơn này vì:</p>
-                    <p>{{ request.reason }}</p>
+                    <p>{{ requestDetail.data.reason }}</p>
                     <p>Tôi xin cảm ơn.</p>
                     <br />
                     <br />
                     <br />
                     <br />
-                    <p>Đính kèm file: <a href="">{{ request.file }}</a></p>
-                    <p>Thời gian gửi: {{ request.submittedAt }}</p>
-                    <p>Trạng thái: {{ request.status }}</p>
-                    <p>Quy trình xử lý: {{ request.processNote }}</p>
+                    <p>Đính kèm file:
+                        <a @click="downloadAttachment(requestDetail.data.requestId)" style="cursor: pointer;">
+                            {{ removePathPrefix(requestDetail.data.attachment || '') }}
+                        </a>
+                    </p>
+                    <p>Thời gian gửi: {{ requestDetail.data.createdAt }}</p>
+                    <p>Trạng thái: {{ requestDetail.data.status }}</p>
+                    <p>Quy trình xử lý: {{ requestDetail.data.processNote }}</p>
                 </div>
             </main>
             <nav>
@@ -33,24 +37,41 @@
 
 <script>
 import { useAuthStore } from '@/stores/auth';
+import { useRequestStore } from '@/stores/request';
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
     setup() {
+        const router = useRouter();
         const { state } = useAuthStore();
 
-        const request = {
-            'id': 1,
-            'category': "Hồ sơ lĩnh vực tài nguyên nước",
-            'processNote': "Ok chờ đi em",
-            'file': "",
-            'reason': "Tôi muốn xin giấy phép khai thác nước sông Hồng để tưới tiêu cho vườn cây ăn quả của tôi. Tôi đã chuẩn bị đầy đủ giấy tờ và hồ sơ cần thiết. Mong cơ quan xem xét và giải quyết giúp tôi. Xin cảm ơn!",
-            'submittedAt': "2024-03-20T00:54:37.7479046+07:00",
-            'status': "Submitted"
+        const { getRequestDetail, requestDetail } = useRequestStore();
+
+        const downloadAttachment = (id) => {
+            let baseURL = import.meta.env.VITE_BASE_URL;
+            location.href = `${baseURL}/Request/${id}/download`;
         }
 
+        const removePathPrefix = (fileName) => {
+            let serverPath = import.meta.env.VITE_BASE_UPLOAD_URL || "";
+            fileName = fileName.replace(serverPath, '');
+
+            return fileName;
+        };
+
+        onMounted(() => {
+            let currentId = router.currentRoute.value.params.id;
+            getRequestDetail(currentId);
+        });
+
+
         return {
-            request,
-            state
+            requestDetail,
+            state,
+            getRequestDetail,
+            downloadAttachment,
+            removePathPrefix,
         }
     }
 }

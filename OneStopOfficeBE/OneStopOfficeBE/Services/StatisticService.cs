@@ -7,6 +7,6 @@ namespace OneStopOfficeBE.Services
     {
         BaseResponse RequestCountPerCategory();
 
-        BaseResponse EfficientStaffs(int number);
+        BaseResponse EfficientStaffs(int? take);
     }
 }

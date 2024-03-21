@@ -19,5 +19,10 @@ namespace OneStopOfficeBE.Controllers
         {
             return _statisticService.RequestCountPerCategory();
         }
+
+        [HttpGet("efficient-staffs")]
+        public BaseResponse GetEfficientStaffs(int? take = 3) {
+            return _statisticService.EfficientStaffs(take);
+        }
     }
 }

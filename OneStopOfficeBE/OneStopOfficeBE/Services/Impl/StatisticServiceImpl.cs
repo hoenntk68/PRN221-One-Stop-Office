@@ -22,15 +22,24 @@ namespace OneStopOfficeBE.Services.Impl
                     RequestCount = c.Requests.Count
                 }
             )
-            .OrderByDescending(item => item.RequestCount)
+            // .OrderByDescending(item => item.RequestCount)
             .ToList();
             return BaseResponse.Success(list);
         }
 
-        public BaseResponse EfficientStaffs(int number)
+        public BaseResponse EfficientStaffs(int? number)
         {
-        //    List<EfficientStaffDto> list = _context.Users 
-            return null;
+            List<EfficientStaffDto> list = _context.Users
+            .Select(u => new EfficientStaffDto
+            {
+                UserId = u.UserId,
+                FullName = u.FullName,
+                RequestCount = u.RequestAssignedToNavigations.Count
+            })
+            .OrderByDescending(item => item.RequestCount)
+            .Take((int)number)
+            .ToList();
+            return BaseResponse.Success(list);
 
         }
     }

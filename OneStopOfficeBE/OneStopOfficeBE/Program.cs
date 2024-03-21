@@ -57,6 +57,7 @@ internal class Program
         builder.Services.AddScoped<UserService, UserServiceImpl>();
         builder.Services.AddScoped<RequestService, RequestServiceImpl>();
         builder.Services.AddScoped<CategoryService, CategoryServiceImpl>();
+        builder.Services.AddScoped<StatisticService, StatisticServiceImpl>();
 
         var app = builder.Build();
 

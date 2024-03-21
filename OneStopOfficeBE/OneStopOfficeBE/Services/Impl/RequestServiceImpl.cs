@@ -86,6 +86,26 @@ namespace OneStopOfficeBE.Services.Impl
             return attachmentFilePath;
         }
 
+        public IActionResult DownloadAttachment(int id)
+        {
+            Request? request = _context.Requests.FirstOrDefault(r => r.RequestId == id);
+            if (request == null)
+            {
+                return new NotFoundResult();
+            }
+            string attachmentPath = request.Attachment;
+            if (!File.Exists(attachmentPath))
+            {
+                return new NotFoundResult();
+            }
+            string attachmentName = Path.GetFileName(attachmentPath);
+            string attachmentType = "application/octet-stream";
+            return new PhysicalFileResult(attachmentPath, attachmentType)
+            {
+                FileDownloadName = attachmentName
+            };
+        }
+
         public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset, string status, string sortBy = "created_at")
         {
             string? username = user?.Username;

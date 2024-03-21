@@ -16,7 +16,11 @@
                     <br />
                     <br />
                     <br />
-                    <p>Đính kèm file: <a href="">{{ requestDetail.data.attachment }}</a></p>
+                    <p>Đính kèm file:
+                        <a @click="downloadAttachment(requestDetail.data.requestId)" style="cursor: pointer;">
+                            {{ removePathPrefix(requestDetail.data.attachment || '') }}
+                        </a>
+                    </p>
                     <p>Thời gian gửi: {{ requestDetail.data.createdAt }}</p>
                     <p>Trạng thái: {{ requestDetail.data.status }}</p>
                     <p>Quy trình xử lý: {{ requestDetail.data.processNote }}</p>
@@ -44,6 +48,18 @@ export default {
 
         const { getRequestDetail, requestDetail } = useRequestStore();
 
+        const downloadAttachment = (id) => {
+            let baseURL = import.meta.env.VITE_BASE_URL;
+            location.href = `${baseURL}/Request/${id}/download`;
+        }
+
+        const removePathPrefix = (fileName) => {
+            let serverPath = import.meta.env.VITE_BASE_UPLOAD_URL || "";
+            fileName = fileName.replace(serverPath, '');
+
+            return fileName;
+        };
+
         onMounted(() => {
             let currentId = router.currentRoute.value.params.id;
             getRequestDetail(currentId);
@@ -54,6 +70,8 @@ export default {
             requestDetail,
             state,
             getRequestDetail,
+            downloadAttachment,
+            removePathPrefix,
         }
     }
 }

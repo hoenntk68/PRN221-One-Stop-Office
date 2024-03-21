@@ -11,10 +11,12 @@ namespace OneStopOfficeBE.Models
         public string? Reason { get; set; }
         public string? Attachment { get; set; }
         public string? ProcessNote { get; set; }
+        public string? Status { get; set; }
+        public string? AssignedTo { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set; }
-        public string? Status { get; set; }
 
+        public virtual User? AssignedToNavigation { get; set; }
         public virtual Category? Category { get; set; }
         public virtual User? User { get; set; }
     }

@@ -25,16 +25,18 @@ CREATE TABLE [User] (
     email VARCHAR(255),
 	token VARCHAR(1000),
 	is_token_valid BIT,
-	[password] VARCHAR(50) 
+	[password] VARCHAR(50),
+    is_admin BIT NOT NULL DEFAULT 0,
+    is_super_admin BIT NOT NULL  DEFAULT 0,
 );
 
 -- Create the 'staff' table
-CREATE TABLE [Staff] (
-    staff_id INT PRIMARY KEY IDENTITY(1,1),
-    [user_id] VARCHAR(50) NOT NULL,
-    is_super_admin BIT NOT NULL,
-    FOREIGN KEY ([user_id]) REFERENCES [user]([user_id])
-);
+-- CREATE TABLE [Staff] (
+--     staff_id INT PRIMARY KEY IDENTITY(1,1),
+--     [user_id] VARCHAR(50) NOT NULL,
+--     is_super_admin BIT NOT NULL,
+--     FOREIGN KEY ([user_id]) REFERENCES [user]([user_id])
+-- );
 
 -- Create the 'category' table
 CREATE TABLE Category (
@@ -45,11 +47,11 @@ CREATE TABLE Category (
 
 -- Create the 'category_staff' table
 CREATE TABLE Staff_Category (
-    staff_id INT,
+    user_id VARCHAR(50),
     category_id INT,
     FOREIGN KEY (category_id) REFERENCES category(category_id),
-	FOREIGN KEY (staff_id) REFERENCES staff(staff_id),
-	PRIMARY KEY (staff_id, category_id)
+	FOREIGN KEY (user_id) REFERENCES [User](user_id),
+	PRIMARY KEY (user_id, category_id)
 );
 
 -- Create the 'request' table
@@ -61,9 +63,11 @@ CREATE TABLE Request (
     attachment VARCHAR(500),
 	process_note VARCHAR(500),
 	[status] VARCHAR(50),
+    assigned_to VARCHAR(50),
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	update_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY ([user_id]) REFERENCES [user]([user_id]),
+    FOREIGN KEY ([assigned_to]) REFERENCES [user]([user_id]),
     FOREIGN KEY (category_id) REFERENCES category(category_id)
 );
 
@@ -79,7 +83,7 @@ IF OBJECT_ID('[role]', 'U') IS NOT NULL DROP TABLE [role];
 
 -- SELECT * FROM [role];
 SELECT * FROM [User];
-SELECT * FROM [Staff];
+-- SELECT * FROM [Staff];
 SELECT * FROM [Category]
 SELECT * FROM [Staff_Category];
 SELECT * FROM [Request];

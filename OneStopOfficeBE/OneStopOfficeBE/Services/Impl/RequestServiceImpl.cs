@@ -115,7 +115,8 @@ namespace OneStopOfficeBE.Services.Impl
                 case false:
                     requestList = _context.Requests
                         .Include(r => r.Category)
-                        .ThenInclude(c => c.staff)
+                        .Include(r => r.AssignedToNavigation)
+                        // .ThenInclude(c => c.staff)
                         .Where(r => r.UserId == username && r.Status == status)
                         .Skip(offset)
                         .Take(limit)
@@ -125,8 +126,8 @@ namespace OneStopOfficeBE.Services.Impl
                 case true:
                     requestList = _context.Requests
                         .Include(r => r.Category)
-                        .ThenInclude(c => c.staff)
-                        .Where(r => r.UserId != username && r.Category.staff.Any(s => s.UserId == username) && r.Status == status)
+                        // .ThenInclude(c => c.staff)
+                        .Where(r => r.UserId != username && r.AssignedTo == user.Username && (r.Status == status || status == null))
                         .Skip(offset)
                         .Take(limit)
                         .OrderBy(r => r.CreatedAt)
@@ -189,8 +190,8 @@ namespace OneStopOfficeBE.Services.Impl
                 // check if user is entitled to change request status
                 requestFound = _context.Requests
                         .Include(r => r.Category)
-                        .ThenInclude(c => c.staff)
-                        .Where(r => r.UserId != user.Username && r.Category.staff.Any(s => s.UserId == user.Username))
+                        // .ThenInclude(c => c.staff)
+                        .Where(r => r.UserId != user.Username && r.AssignedToNavigation.UserId == user.Username)
                         .FirstOrDefault(r => r.RequestId == request.RequestId);
                 if (requestFound == null)
                 {

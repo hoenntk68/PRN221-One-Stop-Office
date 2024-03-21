@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OneStopOfficeBE.Models
-{
+namespace OneStopOfficeBE.Models{
     public partial class User
     {
         public User()
         {
-            Requests = new HashSet<Request>();
-            staff = new HashSet<staff>();
+            RequestAssignedToNavigations = new HashSet<Request>();
+            RequestUsers = new HashSet<Request>();
+            Categories = new HashSet<Category>();
         }
 
         public string UserId { get; set; } = null!;
@@ -21,8 +21,12 @@ namespace OneStopOfficeBE.Models
         public string? Token { get; set; }
         public bool? IsTokenValid { get; set; }
         public string? Password { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsSuperAdmin { get; set; }
 
-        public virtual ICollection<Request> Requests { get; set; }
-        public virtual ICollection<staff> staff { get; set; }
+        public virtual ICollection<Request> RequestAssignedToNavigations { get; set; }
+        public virtual ICollection<Request> RequestUsers { get; set; }
+
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

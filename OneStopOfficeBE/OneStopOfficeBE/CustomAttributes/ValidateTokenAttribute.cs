@@ -28,7 +28,7 @@ namespace OneStopOfficeBE.CustomAttributes
 
                     PRN221_OneStopOfficeContext _context = new PRN221_OneStopOfficeContext();
                     User? user = _context.Users
-                        .Include(u => u.staff)
+                        // .Include(u => u.staff)
                         .FirstOrDefault(u => u.UserId == username);
                     if (user == null)
                     {
@@ -47,23 +47,23 @@ namespace OneStopOfficeBE.CustomAttributes
                     }
 
                     //context.ActionArguments["username"] = username;
-                    bool isAd = false;
-                    bool isSuperAd = false;
-                    if (user.staff != null)
-                    {
-                        List<staff> staffList = user.staff.ToList();
-                        if (staffList.Count > 0)
-                        {
-                            isAd = true;
-                            isSuperAd = staffList[0].IsSuperAdmin;
-                        }
-                    }
+                    // bool isAd = false;
+                    // bool isSuperAd = false;
+                    // if (user.staff != null)
+                    // {
+                    //     List<staff> staffList = user.staff.ToList();
+                    //     if (staffList.Count > 0)
+                    //     {
+                    //         isAd = true;
+                    //         isSuperAd = staffList[0].IsSuperAdmin;
+                    //     }
+                    // }
 
                     UserExtracted userExtracted = new UserExtracted()
                     {
                         Username = user.UserId,
-                        IsAdmin = isAd,
-                        IsSuperAdmin = isSuperAd,
+                        IsAdmin = user.IsAdmin,
+                        IsSuperAdmin = user.IsSuperAdmin,
                     };
                     context.ActionArguments["jsonClaims"] = JsonSerializer.Serialize(userExtracted);
 

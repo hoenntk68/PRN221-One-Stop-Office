@@ -37,7 +37,7 @@ namespace OneStopOfficeBE.Services.Impl
         public BaseResponse Login(LoginRequestDto loginDto)
         {
             User? user = _context.Users
-                .Include(u => u.staff)
+                // .Include(u => u.staff)
                 .SingleOrDefault(
                  s => s.UserId != null && s.UserId == loginDto.userName
                 && s.Password != null && s.Password == loginDto.password
@@ -47,17 +47,17 @@ namespace OneStopOfficeBE.Services.Impl
                 return BaseResponse.Error(ErrorMessageConstant.LOGIN_FAILED);
             }
 
-            bool isAd = false;
-            bool isSuperAd = false;
+            // bool isAd = false;
+            // bool isSuperAd = false;
 
-            if (user.staff.Count > 0)
-            {
-                isAd = true;
-                if (user.staff.First().IsSuperAdmin)
-                {
-                    isSuperAd = true;
-                }
-            }
+            // if (user.staff.Count > 0)
+            // {
+            //     isAd = true;
+            //     if (user.staff.First().IsSuperAdmin)
+            //     {
+            //         isSuperAd = true;
+            //     }
+            // }
 
 
             LoginResponseDto responseData = new LoginResponseDto
@@ -65,8 +65,8 @@ namespace OneStopOfficeBE.Services.Impl
                 Token = GenerateToken(user),
                 Username = loginDto.userName,
                 Fullname = user.FullName,
-                IsAdmin = isAd,
-                IsSuperAdmin = isSuperAd,  
+                IsAdmin = user.IsAdmin,
+                IsSuperAdmin = user.IsSuperAdmin,  
             };
             user.Token = responseData.Token;
             user.IsTokenValid = true;
@@ -93,24 +93,24 @@ namespace OneStopOfficeBE.Services.Impl
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(_appSettings.SecretKey);
-            string isAd = "false";
-            string isSuperAd = "false";
-            if (user.staff != null && user.staff.Count > 0)
-            {
-                isAd = "true";
-                List<staff> staffList = user.staff.ToList();
-                if (staffList[0].IsSuperAdmin)
-                {
-                    isSuperAd = "true";
-                }
-            }
+            // string isAd = "false";
+            // string isSuperAd = "false";
+            // if (user.staff != null && user.staff.Count > 0)
+            // {
+            //     isAd = "true";
+            //     List<staff> staffList = user.staff.ToList();
+            //     if (staffList[0].IsSuperAdmin)
+            //     {
+            //         isSuperAd = "true";
+            //     }
+            // }
 
             var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("IsAdmin", isAd),
-                    new Claim("IsSuperAdmin", isSuperAd),
+                    new Claim("IsAdmin", user.IsAdmin.ToString()),
+                    new Claim("IsSuperAdmin", user.IsSuperAdmin.ToString()),
                     new Claim("TokenId", Guid.NewGuid().ToString()),
                     new Claim("Username", user.UserId.ToString()),
                     new Claim("FullName", user.FullName),

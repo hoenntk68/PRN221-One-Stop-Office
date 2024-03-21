@@ -52,7 +52,7 @@ if (Cookies.get('access_token')) {
             </router-link>
           </li>
           <li>
-            <router-link to="/request-list">
+            <router-link to="/statistics">
               Statistic
             </router-link>
           </li>
@@ -94,9 +94,9 @@ if (Cookies.get('access_token')) {
 <style lang="scss" scoped>
 @import "@/assets/styles/app.scss";
 
-// * {
-//   border: 1px solid black !important;
-// }
+* {
+  // border: 1px solid black !important;
+}
 
 header {
   max-height: 100vh;

@@ -10,6 +10,10 @@ const API_CODE = {
 
     //cate
     API_CT_001: "Category/",
+
+    //statistic
+    API_STA_001: "Statistic/",
+    API_STA_002: "Statistic/request-per-category",
 };
 
 export default API_CODE;

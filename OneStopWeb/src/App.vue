@@ -6,12 +6,17 @@ const { state, authLogout } = useAuthStore();
 
 import Cookies from 'js-cookie';
 
-if (Cookies.get('access_token')) {
+if (Cookies.get('token')) {
   state.isLoggedin = true;
   state.username = Cookies.get('fullname');
+  state.isAdmin = Cookies.get('isAdmin') == 'true';
+  state.isSuperAdmin = Cookies.get('isSuperAdmin') == 'true';
+  console.log('state', state);
 } else {
   state.isLoggedin = false;
   state.username = '';
+  state.isAdmin = false;
+  state.isSuperAdmin = false;
 }
 </script>
 
@@ -29,7 +34,7 @@ if (Cookies.get('access_token')) {
         </div>
       </div>
 
-      <nav class="sidebar">
+      <nav class="sidebar" v-if="state.isLoggedin">
         <ul>
           <li>
             <router-link to="/request-submit">
@@ -46,12 +51,12 @@ if (Cookies.get('access_token')) {
               Requests
             </router-link>
           </li>
-          <li>
+          <li v-if="state.isAdmin">
             <router-link to="/request-list">
               Users
             </router-link>
           </li>
-          <li>
+          <li v-if="state.isSuperAdmin">
             <router-link to="/statistics">
               Statistic
             </router-link>
@@ -79,8 +84,8 @@ if (Cookies.get('access_token')) {
     </div>
 
     <footer>
-      <p>Mọi góp ý, thắc mắc xin liên hệ: Phòng dịch vụ sinh viên: Email:
-        <a href="mailto:dichvusinhvien@fe.edu.vn">dichvusinhvien@fe.edu.vn</a>.
+      <p>Mọi góp ý, thắc mắc xin liên hệ: Văn phòng dịch vụ chính phủ: Email:
+        <a href="mailto:dichvusinhvien@fe.edu.vn">vanphongchinhphu@gov.vn</a>.
         Điện thoại: <a href="tel:02473081313">024.7308.13.13</a> hoặc
         <a href="tel:02473081313">024.7308.13.13</a>
         © Powered by FPTU | ANTT | HOENTK | 24x7

@@ -20,7 +20,7 @@
                 <Bar :data="chartData" :options="chartOptions" />
             </div>
             <div class="chart-container" style="background-color: #ebe7e6;">
-                <Bar :data="chartData" :options="chartOptions" />
+                <Bar :data="staffData" :options="staffOptions" />
             </div>
         </div>
     </div>
@@ -115,10 +115,59 @@ export default {
             }
         });
 
+        //for staff
+        const staffLabel = ref([]);
+        const staffValue = ref([]);
+        const staffData = computed(() => {
+            return {
+                labels: staffLabel.value,
+                datasets: [
+                    {
+                        label: 'Data One',
+                        backgroundColor: '#f87979',
+                        data: staffValue.value,
+                        borderRadius: 10
+                    },
+                ]
+            };
+        });
 
+        const staffOptions = ref({
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    display: false
+                }
+            }
+        });
+
+        const getStaffEf = () => {
+            try {
+                service.statistic.getStaffEf(
+                    {},
+                    (response) => {
+                        console.log(response);
+                        staffLabel.value = response.map((item) => item.fullName);
+                        staffValue.value = response.map((item) => item.requestCount);
+                    },
+                    (error) => {
+                        $notify.error('Error', error);
+                    }
+                )
+            } catch (error) {
+                $notify.error('Error', error);
+            }
+        }
 
         onMounted(() => {
             getCateStatistic();
+            getStaffEf();
             pieLabel.value = ['Red', 'Yellow', 'Blue', 'Green', 'Purple'];
             pieValue.value = [12, 19, 3, 5, 2];
         });
@@ -128,6 +177,8 @@ export default {
             chartOptions,
             pieData,
             pieOptions,
+            staffData,
+            staffOptions
         };
     }
 };

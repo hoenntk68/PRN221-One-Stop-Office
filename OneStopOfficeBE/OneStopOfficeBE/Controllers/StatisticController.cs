@@ -21,7 +21,7 @@ namespace OneStopOfficeBE.Controllers
         }
 
         [HttpGet("efficient-staffs")]
-        public BaseResponse GetEfficientStaffs(int? take = 3)
+        public BaseResponse GetEfficientStaffs(int? take)
         {
             return _statisticService.EfficientStaffs(take);
         }

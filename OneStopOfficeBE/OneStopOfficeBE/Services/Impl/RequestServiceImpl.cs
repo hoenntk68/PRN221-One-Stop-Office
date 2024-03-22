@@ -303,5 +303,27 @@ namespace OneStopOfficeBE.Services.Impl
             return dataTable;
         }
 
+        public BaseResponse AssignRequests(AssignRequestDto request)
+        {
+            User? user = _context.Users
+            .FirstOrDefault(u => u.UserId == request.AssignedTo && u.IsAdmin);
+            if (user == null)
+            {
+                return BaseResponse.Error(ErrorMessageConstant.INVALID_ASSIGNEE, 400);
+            }
+            // assign and update status, assigned to
+            List<Request> requestsFound = _context.Requests
+                .Where(r => request.Requests.Contains(r.RequestId))
+                .ToList();
+            foreach (Request r in requestsFound)
+            {
+                r.AssignedTo = request.AssignedTo;
+                r.Status = StatusEnum.Processing.ToString();
+                r.UpdateAt = DateTime.Now;
+            }
+            _context.Requests.UpdateRange(requestsFound);
+            _context.SaveChanges();
+            return BaseResponse.Success();
+        }
     }
 }

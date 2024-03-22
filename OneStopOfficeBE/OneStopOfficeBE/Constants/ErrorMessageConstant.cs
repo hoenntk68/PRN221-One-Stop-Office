@@ -16,5 +16,7 @@
 
         public static readonly string INVALID_STATUS = "Status is invalid";
 
+        public static readonly string INVALID_ASSIGNEE = "Assignee is invalid";
+
     }
 }

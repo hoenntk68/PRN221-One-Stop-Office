@@ -42,7 +42,7 @@ namespace OneStopOfficeBE.Services.Impl
             User? user = _context.Users.SingleOrDefault(u => u.UserId == id);
             if (user == null)
             {
-                return BaseResponse.Error("User not found", 404);
+                return BaseResponse.Error(ErrorMessageConstant.USER_NOT_FOUND, 404);
             }
             return BaseResponse.Success(user);
         }
@@ -59,19 +59,6 @@ namespace OneStopOfficeBE.Services.Impl
             {
                 return BaseResponse.Error(ErrorMessageConstant.LOGIN_FAILED);
             }
-
-            // bool isAd = false;
-            // bool isSuperAd = false;
-
-            // if (user.staff.Count > 0)
-            // {
-            //     isAd = true;
-            //     if (user.staff.First().IsSuperAdmin)
-            //     {
-            //         isSuperAd = true;
-            //     }
-            // }
-
 
             LoginResponseDto responseData = new LoginResponseDto
             {
@@ -106,18 +93,6 @@ namespace OneStopOfficeBE.Services.Impl
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(_appSettings.SecretKey);
-            // string isAd = "false";
-            // string isSuperAd = "false";
-            // if (user.staff != null && user.staff.Count > 0)
-            // {
-            //     isAd = "true";
-            //     List<staff> staffList = user.staff.ToList();
-            //     if (staffList[0].IsSuperAdmin)
-            //     {
-            //         isSuperAd = "true";
-            //     }
-            // }
-
             var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]

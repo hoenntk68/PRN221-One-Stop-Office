@@ -25,5 +25,7 @@ namespace OneStopOfficeBE.Services
         BaseResponse UpdateRequestStatus(UpdateStatusRequest request, UserExtracted? user);
 
         DataTable GetData(UserExtracted? user, string status, int categoryId, string sortBy = "created_at", string sortOption = "asc");
+
+        BaseResponse AssignRequests(AssignRequestDto request);
     }
 }

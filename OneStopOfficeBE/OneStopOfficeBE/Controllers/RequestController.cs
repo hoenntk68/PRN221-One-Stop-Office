@@ -84,7 +84,8 @@ namespace OneStopOfficeBE.Controllers
         [ValidateToken]
         public BaseResponse UpdateRequestStatus(UpdateStatusRequest request, string? jsonClaims)
         {
-            if (jsonClaims == null ){
+            if (jsonClaims == null)
+            {
                 return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED, 401);
             }
             UserExtracted? user = JwtHelper.extractUser(jsonClaims);
@@ -126,6 +127,22 @@ namespace OneStopOfficeBE.Controllers
                     return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                 }
             }
+        }
+
+        [HttpPatch("assign")]
+        [ValidateToken]
+        public BaseResponse AssignRequests(string? jsonClaims, AssignRequestDto request)
+        {
+            if (jsonClaims == null)
+            {
+                return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED);
+            }
+            UserExtracted? user = JwtHelper.extractUser(jsonClaims);
+            if (user == null || !(bool)user.IsSuperAdmin)
+            {
+                return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED);
+            }
+            return _requestService.AssignRequests(request);
         }
     }
 }

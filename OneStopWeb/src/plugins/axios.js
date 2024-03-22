@@ -5,7 +5,7 @@ const headers = {
     'x-locale': Cookies.get('CurrentLanguage') || 'ja'
 };
 
-const token = Cookies.get('access_token');
+const token = Cookies.get('token');
 if (token != undefined && token.length != 0) {
     headers.Authorization = 'Bearer ' + token;
 }

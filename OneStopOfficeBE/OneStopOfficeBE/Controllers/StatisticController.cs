@@ -31,5 +31,10 @@ namespace OneStopOfficeBE.Controllers
         {
             return _statisticService.GeneralStats();
         }
+
+        [HttpGet("request-by-status")]
+        public BaseResponse RequestCountByStatus() {
+            return _statisticService.RequestCountByStatus();
+        }
     }
 }

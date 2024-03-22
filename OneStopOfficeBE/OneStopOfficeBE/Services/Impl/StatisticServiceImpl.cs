@@ -59,5 +59,16 @@ namespace OneStopOfficeBE.Services.Impl
             };
             return BaseResponse.Success(stats);
         }
+
+        public BaseResponse RequestCountByStatus()
+        {
+            List<RequestCountByStatus> list = _context.Requests.GroupBy(r => r.Status)
+            .Select(s => new RequestCountByStatus
+            {
+                Status = s.Key,
+                RequestCount = s.Count()
+            }).ToList();
+            return BaseResponse.Success(list);
+        }
     }
 }

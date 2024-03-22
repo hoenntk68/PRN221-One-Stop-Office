@@ -44,5 +44,10 @@ namespace OneStopOfficeBE.Controllers
             UserExtracted user = JwtHelper.extractUser(jsonClaims);
             return _userService.Logout(user);
         }
+
+        [HttpGet("staffs")]
+        public BaseResponse GetAdmins() {
+            return _userService.GetAdmins();
+        }
     }
 }

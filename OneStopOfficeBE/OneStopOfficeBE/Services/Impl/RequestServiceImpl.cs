@@ -108,9 +108,9 @@ namespace OneStopOfficeBE.Services.Impl
             };
         }
 
-        public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset, string status, string sortBy = "created_at", string sortOption = "asc")
+        public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset, string status, int categoryId, string sortBy = "created_at", string sortOption = "asc")
         {
-            List<RequestListResponseDto> responseList = GetRequestByUsername(user, status)
+            List<RequestListResponseDto> responseList = GetRequestByUsername(user, status, categoryId)
                 .Skip(offset)
                 .Take(limit)
                 .ToList();
@@ -213,18 +213,19 @@ namespace OneStopOfficeBE.Services.Impl
             });
         }
 
-        public List<RequestListResponseDto> GetRequestByUsername(UserExtracted? user, string status)
+        public List<RequestListResponseDto> GetRequestByUsername(UserExtracted? user, string status, int categoryId)
         {
             string? username = user?.Username;
             List<Request> requestList = _context.Requests
                 .Include(r => r.AssignedToNavigation)
                 .Include(r => r.Category)
+                .Where(r => (r.CategoryId == categoryId || categoryId == 0) && (r.Status == status || status == null))
                 .ToList();
             switch (user?.IsAdmin)
             {
                 case false:
                     requestList = requestList
-                        .Where(r => r.UserId == username && r.Status == status)
+                        .Where(r => r.UserId == username)
                         .ToList();
                     break;
                 case true:
@@ -237,7 +238,7 @@ namespace OneStopOfficeBE.Services.Impl
                             break;
                         case false:
                             requestList = requestList
-                                .Where(r => r.UserId != username && r.AssignedTo == user.Username && (r.Status == status || status == null))
+                                .Where(r => r.UserId != username && r.AssignedTo == user.Username)
                                 .ToList();
                             break;
                     }
@@ -259,7 +260,7 @@ namespace OneStopOfficeBE.Services.Impl
             return responseList;
         }
 
-        public DataTable GetData(UserExtracted? user, string status, string sortBy = "created_at", string sortOption = "asc")
+        public DataTable GetData(UserExtracted? user, string status, int categoryId, string sortBy = "created_at", string sortOption = "asc")
         {
             DataTable dataTable = new DataTable
             {
@@ -273,7 +274,7 @@ namespace OneStopOfficeBE.Services.Impl
             dataTable.Columns.Add("Process Note", typeof(string));
             dataTable.Columns.Add("Last Processed", typeof(DateTime));
 
-            List<RequestListResponseDto> list = GetRequestByUsername(user, status);
+            List<RequestListResponseDto> list = GetRequestByUsername(user, status, categoryId);
             switch (sortOption)
             {
                 case "desc":

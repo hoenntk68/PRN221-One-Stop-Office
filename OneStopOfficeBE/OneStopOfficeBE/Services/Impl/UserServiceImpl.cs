@@ -24,6 +24,19 @@ namespace OneStopOfficeBE.Services.Impl
             _appSettings = appSettings.CurrentValue;
         }
 
+        public BaseResponse GetAdmins()
+        {
+            List<AdminInfoDto> admins = _context.Users
+            .Where(u => u.IsAdmin)
+            .Select(u => new AdminInfoDto
+            {
+                UserId = u.UserId,
+                FullName = u.FullName
+            })
+            .ToList();
+            return BaseResponse.Success(admins);
+        }
+
         public BaseResponse GetInfo(string id)
         {
             User? user = _context.Users.SingleOrDefault(u => u.UserId == id);
@@ -66,7 +79,7 @@ namespace OneStopOfficeBE.Services.Impl
                 Username = loginDto.userName,
                 Fullname = user.FullName,
                 IsAdmin = user.IsAdmin,
-                IsSuperAdmin = user.IsSuperAdmin,  
+                IsSuperAdmin = user.IsSuperAdmin,
             };
             user.Token = responseData.Token;
             user.IsTokenValid = true;

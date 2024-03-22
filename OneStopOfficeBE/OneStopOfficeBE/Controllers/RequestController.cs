@@ -56,7 +56,8 @@ namespace OneStopOfficeBE.Controllers
             [FromQuery] int offset = 0,
             [FromQuery] string? status = "Submitted",
             [FromQuery] string? sortBy = "created_at",
-            [FromQuery] string? sortOption = "asc"
+            [FromQuery] string? sortOption = "asc",
+            [FromQuery] string? categoryId = "0"
         )
         {
             UserExtracted? user = JwtHelper.extractUser(jsonClaims);
@@ -64,8 +65,8 @@ namespace OneStopOfficeBE.Controllers
             {
                 return BaseResponse.Error("Unauthorized", 401);
             }
-
-            return _requestService.GetRequestByUsername(user, limit, offset, status, sortBy, sortOption);
+            int cateId = int.Parse(categoryId);
+            return _requestService.GetRequestByUsername(user, limit, offset, status, cateId, sortBy, sortOption);
         }
 
         [HttpGet("detail/{id}")]
@@ -83,10 +84,13 @@ namespace OneStopOfficeBE.Controllers
         [ValidateToken]
         public BaseResponse UpdateRequestStatus(UpdateStatusRequest request, string? jsonClaims)
         {
+            if (jsonClaims == null ){
+                return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED, 401);
+            }
             UserExtracted? user = JwtHelper.extractUser(jsonClaims);
             if (user == null)
             {
-                return BaseResponse.Error("Unauthorized", 401);
+                return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED, 401);
             }
             return _requestService.UpdateRequestStatus(request, user);
         }
@@ -97,14 +101,12 @@ namespace OneStopOfficeBE.Controllers
             string? jsonClaims,
             [FromQuery] string? status = "Submitted",
             [FromQuery] string? sortBy = "created_at",
-            [FromQuery] string? sortOption = "asc"
+            [FromQuery] string? sortOption = "asc",
+            [FromQuery] string? categoryId = "0"
         )
         {
             if (jsonClaims == null)
             {
-                Console.WriteLine("-------------------------");
-                Console.WriteLine("JSON CLAIMS IS " + jsonClaims);
-                Console.WriteLine("-------------------------");
                 return Unauthorized(ErrorMessageConstant.UNAUTHORIZED);
             }
             UserExtracted? user = JwtHelper.extractUser(jsonClaims);
@@ -112,8 +114,9 @@ namespace OneStopOfficeBE.Controllers
             {
                 return Unauthorized(ErrorMessageConstant.UNAUTHORIZED);
             }
+            int cateId = int.Parse(categoryId);
             string fileName = "Request_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
-            var table = _requestService.GetData(user, status, sortBy, sortOption);
+            var table = _requestService.GetData(user, status, cateId, sortBy, sortOption);
             using (XLWorkbook workbook = new XLWorkbook())
             {
                 workbook.AddWorksheet(table, "Request Report");

@@ -9,5 +9,6 @@ namespace OneStopOfficeBE.Services
         BaseResponse GetInfo(string id);
         BaseResponse Login(LoginRequestDto loginRequest);
         BaseResponse Logout(UserExtracted? user);
+        BaseResponse GetAdmins();
     }
 }

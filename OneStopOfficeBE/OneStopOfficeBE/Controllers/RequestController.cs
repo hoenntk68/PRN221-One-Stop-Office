@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
+using OneStopOfficeBE.Constants;
 using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.DTOs;
 using OneStopOfficeBE.DTOs.Request;
@@ -91,10 +92,28 @@ namespace OneStopOfficeBE.Controllers
         }
 
         [HttpGet("export")]
-        public ActionResult ExportRequest()
+        [ValidateToken]
+        public ActionResult ExportRequest(
+            string? jsonClaims,
+            [FromQuery] string? status = "Submitted",
+            [FromQuery] string? sortBy = "created_at",
+            [FromQuery] string? sortOption = "asc"
+        )
         {
+            if (jsonClaims == null)
+            {
+                Console.WriteLine("-------------------------");
+                Console.WriteLine("JSON CLAIMS IS " + jsonClaims);
+                Console.WriteLine("-------------------------");
+                return Unauthorized(ErrorMessageConstant.UNAUTHORIZED);
+            }
+            UserExtracted? user = JwtHelper.extractUser(jsonClaims);
+            if (user == null)
+            {
+                return Unauthorized(ErrorMessageConstant.UNAUTHORIZED);
+            }
             string fileName = "Request_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
-            var table = _requestService.GetData();
+            var table = _requestService.GetData(user, status, sortBy, sortOption);
             using (XLWorkbook workbook = new XLWorkbook())
             {
                 workbook.AddWorksheet(table, "Request Report");

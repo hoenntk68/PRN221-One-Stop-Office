@@ -165,16 +165,22 @@ namespace OneStopOfficeBE.Services.Impl
             Request? requestFound = null;
             if ((bool)user.IsAdmin)
             {
-                // if ()
-                // check if user is entitled to change request status
-                requestFound = _context.Requests
-                        .Include(r => r.Category)
-                        // .ThenInclude(c => c.staff)
-                        .Where(r => r.UserId != user.Username && r.AssignedToNavigation.UserId == user.Username)
-                        .FirstOrDefault(r => r.RequestId == request.RequestId);
+                if ((bool)user.IsSuperAdmin)
+                {
+                    requestFound = _context.Requests
+                            .Include(r => r.Category)
+                            .FirstOrDefault(r => r.RequestId == request.RequestId);
+                }
+                else
+                {
+                    requestFound = _context.Requests
+                            .Include(r => r.Category)
+                            .Where(r => r.UserId != user.Username && r.AssignedToNavigation.UserId == user.Username)
+                            .FirstOrDefault(r => r.RequestId == request.RequestId);
+                }
                 if (requestFound == null)
                 {
-                    return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED, 401);
+                    return BaseResponse.Error(ErrorMessageConstant.REQUEST_NOT_FOUND, 401);
                 }
             }
             else
@@ -253,7 +259,7 @@ namespace OneStopOfficeBE.Services.Impl
             return responseList;
         }
 
-        public DataTable GetData()
+        public DataTable GetData(UserExtracted? user, string status, string sortBy = "created_at", string sortOption = "asc")
         {
             DataTable dataTable = new DataTable
             {
@@ -267,21 +273,29 @@ namespace OneStopOfficeBE.Services.Impl
             dataTable.Columns.Add("Process Note", typeof(string));
             dataTable.Columns.Add("Last Processed", typeof(DateTime));
 
-            List<Request> list = _context.Requests
-                .Include(r => r.Category)
-                .ToList();
+            List<RequestListResponseDto> list = GetRequestByUsername(user, status);
+            switch (sortOption)
+            {
+                case "desc":
+                    list = list.OrderByDescending(r => r.SubmittedAt).ToList();
+                    break;
+                case "asc":
+                default:
+                    list = list.OrderBy(r => r.SubmittedAt).ToList();
+                    break;
+            }
             if (list.Count > 0)
             {
                 list.ForEach(item =>
                 {
                     dataTable.Rows.Add(
-                        item.RequestId,
-                        item.Category.CategoryName,
+                        item.Id,
+                        item.Category,
                         item.Reason,
-                        item.CreatedAt,
+                        item.SubmittedAt,
                         item.Status,
                         item.ProcessNote,
-                        item.UpdateAt
+                        item.ProcessedAt
                     );
                 });
             }

@@ -27,7 +27,7 @@ namespace OneStopOfficeBE.Services.Impl
         public BaseResponse GetAdmins()
         {
             List<AdminInfoDto> admins = _context.Users
-            .Where(u => u.IsAdmin)
+            .Where(u => u.IsAdmin && !u.IsSuperAdmin)
             .Select(u => new AdminInfoDto
             {
                 UserId = u.UserId,

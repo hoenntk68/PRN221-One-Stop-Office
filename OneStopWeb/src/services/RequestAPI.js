@@ -23,4 +23,11 @@ export default class RequestAPI extends BaseService {
         this.post(API_CODE.API_RQ_004, success, error, params);
     }
 
+    exportRequest(params = {}, success, error) {
+        this.get(API_CODE.API_RQ_005, success, error, params);
+    }
+
+    assignRequest(params = {}, success, error) {
+        this.patch(API_CODE.API_RQ_006, success, error, params);
+    }
 }

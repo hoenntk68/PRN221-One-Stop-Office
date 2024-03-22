@@ -1,46 +1,76 @@
 <template>
   <div>
     <div class="requestTable">
-      <div>
-        <input id="search" v-model="search" placeholder="Tìm kiếm" clearable />
-        <el-button style="margin: 0 8px; background-color: #d8e7e2; border: 2px solid #0b9c6c;">Search</el-button>
-      </div>
       <div class="rthead">
-        <span>STT</span>
-        <span>Danh mục</span>
+        <span>
+          <input type="checkbox" v-model="checkAll" @change="handleCheckAll">
+          STT
+        </span>
+        <span>
+          <el-select v-model="requestFilter.categoryId" @change="handleFilter()">
+            <el-option label="All" value="0"></el-option>
+            <el-option v-for="item in categoryList" :key="item.categoryId" :label="item.categoryName"
+              :value="item.categoryId"></el-option>
+          </el-select>
+        </span>
         <span>Lý do</span>
         <span>File đính kèm</span>
-        <span>Thời gian tạo</span>
-        <span>Trạng thái</span>
+        <el-select v-model="requestFilter.orderBy" @change="handleFilter()">
+          <el-option label="Cũ" value="asc"></el-option>
+          <el-option label="Mới" value="desc"></el-option>
+        </el-select>
+        <el-select v-model="requestFilter.status" @change="handleFilter()">
+          <el-option label="All" value=""></el-option>
+          <el-option label="Trạng thái: Submitted" value="Submitted"></el-option>
+          <el-option label="Trạng thái: Approved" value="Approved"></el-option>
+          <el-option label="Trạng thái: Rejected" value="Rejected"></el-option>
+          <el-option label="Trạng thái: Processing" value="Processing"></el-option>
+          <el-option label="Trạng thái: Cancelled" value="Cancelled"></el-option>
+        </el-select>
         <span>Thao tác</span>
       </div>
 
     </div>
-    <div v-for="(item, index) in requestList" :key="index" class="rtbody">
-      <span style="text-align: center;">{{ item.id }}</span>
-      <span>{{ item.category }}</span>
-      <span>{{ item.reason }}</span>
-      <span>{{ item.file }}</span>
-      <span>{{ item.creationTime }}</span>
-      <span>{{ item.status }}</span>
-      <div>
-        <el-button type="primary" @click="navigateDetails(item.id)">info</el-button>
-        <el-button v-if="item.status != 'approved'" type="danger"
-          @click="handleDelete(item.id, 'Cancelled')">Cancel</el-button>
+    <div class="request-table-body">
+      <div v-for="(item, index) in requestList" :key="index" class="rtbody">
+        <span style="text-align: center;">
+          <input type="checkbox" v-model="selectedItems.data" class="index-checkbox" @change="handleCheckboxChange"
+            :value="item.id">
+          {{ item.id }}
+        </span>
+        <span>{{ item.category }}</span>
+        <span>{{ item.reason }}</span>
+        <span>{{ item.file }}</span>
+        <span>{{ item.submittedAt }}</span>
+        <span>{{ item.status }}</span>
+        <div>
+          <el-button type="primary" @click="navigateDetails(item.id)">Chi tiết</el-button>
+          <el-button v-if="item.status != 'approved'" type="danger" @click="handleDelete(item.id, 'Cancelled')">Hủy yêu
+            cầu</el-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRequestStore } from '@/stores/request';
+import service from '../plugins/service';
+import { $notify } from '@/utils/variables';
 
 export default {
   props: { requestList: Object },
   setup() {
     const requestStore = useRequestStore();
-    const { updateRequestStatus, requestState } = requestStore;
+    const {
+      updateRequestStatus,
+      requestState,
+      requestFilter,
+      selectedItems,
+    } = requestStore;
+
+    const checkAll = ref(false);
 
     const search = ref('');
     const router = useRouter();
@@ -58,6 +88,44 @@ export default {
       updateRequestStatus(status);
     }
 
+    const handleFilter = () => {
+      requestStore.getRequestList();
+    }
+
+    const handleCheckAll = () => {
+      const checkboxes = document.querySelectorAll('.index-checkbox');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = checkAll.value;
+      });
+    };
+
+    const categoryList = ref([]);
+
+    const fetchCategory = () => {
+      try {
+        service.cate.getAll(
+          {},
+          (response) => {
+            categoryList.value = response;
+          },
+          (error) => {
+            $notify.error('Error', error.message);
+          }
+        );
+      } catch (error) {
+        console.log('error', error);
+        $notify.error('Error', error.message);
+      }
+    };
+
+    const handleCheckboxChange = () => {
+      console.log('selectedItems in component', selectedItems);
+    };
+
+    onMounted(() => {
+      fetchCategory();
+    });
+
 
     return {
       search,
@@ -65,6 +133,14 @@ export default {
       handleEdit,
       handleDelete,
       requestState,
+      requestFilter,
+      handleFilter,
+      selectedItems,
+      handleCheckAll,
+      handleCheckboxChange,
+      checkAll,
+      fetchCategory,
+      categoryList,
     };
   }
 
@@ -75,6 +151,12 @@ export default {
 .rtbody {
   display: grid;
   grid-template-columns: .8fr 3fr 3fr 2fr 2fr 2fr 3fr;
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .rthead {
@@ -91,20 +173,15 @@ export default {
   font-weight: bolder !important;
   padding: 8px 24px;
 
-  #search {
-    background-color: #d8e7e2;
-    border: 2px solid #0b9c6c;
-    border-radius: 4px;
-    height: 32px;
-    line-height: 32px;
-    font-size: 14px;
-    padding: 0 10px;
-    width: 25%;
-  }
 
   span {
     // padding: 0 8px;
   }
+}
+
+.request-table-body {
+  height: 70dvh;
+  overflow: auto;
 }
 
 .rtbody {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Mvc;
 using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.DTOs;
 using OneStopOfficeBE.DTOs.Request;
@@ -63,7 +64,7 @@ namespace OneStopOfficeBE.Controllers
                 return BaseResponse.Error("Unauthorized", 401);
             }
 
-            return _requestService.GetRequestByUsername(user, limit, offset, status, sortBy);
+            return _requestService.GetRequestByUsername(user, limit, offset, status, sortBy, sortOption);
         }
 
         [HttpGet("detail/{id}")]
@@ -87,6 +88,22 @@ namespace OneStopOfficeBE.Controllers
                 return BaseResponse.Error("Unauthorized", 401);
             }
             return _requestService.UpdateRequestStatus(request, user);
+        }
+
+        [HttpGet("export")]
+        public ActionResult ExportRequest()
+        {
+            string fileName = "Request_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+            var table = _requestService.GetData();
+            using (XLWorkbook workbook = new XLWorkbook())
+            {
+                workbook.AddWorksheet(table, "Request Report");
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                }
+            }
         }
     }
 }

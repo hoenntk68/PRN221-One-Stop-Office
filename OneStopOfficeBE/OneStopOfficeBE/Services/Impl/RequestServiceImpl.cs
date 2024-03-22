@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using OneStopOfficeBE.Models;
 using OneStopOfficeBE.DTOs;
 using OneStopOfficeBE.Utils;
+using System.Data;
+using ClosedXML.Excel;
 
 namespace OneStopOfficeBE.Services.Impl
 {
@@ -163,6 +165,7 @@ namespace OneStopOfficeBE.Services.Impl
             Request? requestFound = null;
             if ((bool)user.IsAdmin)
             {
+                // if ()
                 // check if user is entitled to change request status
                 requestFound = _context.Requests
                         .Include(r => r.Category)
@@ -219,15 +222,22 @@ namespace OneStopOfficeBE.Services.Impl
                         .ToList();
                     break;
                 case true:
-                    if (!(bool)user?.IsSuperAdmin)
+                    switch ((bool)user?.IsSuperAdmin)
                     {
-                        requestList = requestList
-                            .Where(r => r.UserId != username && r.AssignedTo == user.Username && (r.Status == status || status == null))
-                            .ToList();
+                        case true:
+                            requestList = requestList
+                                .Where(r => r.Status == status || status == null)
+                                .ToList();
+                            break;
+                        case false:
+                            requestList = requestList
+                                .Where(r => r.UserId != username && r.AssignedTo == user.Username && (r.Status == status || status == null))
+                                .ToList();
+                            break;
                     }
                     break;
-
             }
+
             List<RequestListResponseDto> responseList = requestList.Select(item =>
                 new RequestListResponseDto
                 {
@@ -240,6 +250,41 @@ namespace OneStopOfficeBE.Services.Impl
                     Status = item.Status,
                 }).ToList();
             return responseList;
+        }
+
+        public DataTable GetData()
+        {
+            DataTable dataTable = new DataTable
+            {
+                TableName = "Requests"
+            };
+            dataTable.Columns.Add("Id", typeof(int));
+            dataTable.Columns.Add("Category", typeof(string));
+            dataTable.Columns.Add("Reason", typeof(string));
+            dataTable.Columns.Add("Created Time", typeof(DateTime));
+            dataTable.Columns.Add("Status", typeof(string));
+            dataTable.Columns.Add("Process Note", typeof(string));
+            dataTable.Columns.Add("Last Processed", typeof(DateTime));
+
+            List<Request> list = _context.Requests
+                .Include(r => r.Category)
+                .ToList();
+            if (list.Count > 0)
+            {
+                list.ForEach(item =>
+                {
+                    dataTable.Rows.Add(
+                        item.RequestId,
+                        item.Category.CategoryName,
+                        item.Reason,
+                        item.CreatedAt,
+                        item.Status,
+                        item.ProcessNote,
+                        item.UpdateAt
+                    );
+                });
+            }
+            return dataTable;
         }
 
     }

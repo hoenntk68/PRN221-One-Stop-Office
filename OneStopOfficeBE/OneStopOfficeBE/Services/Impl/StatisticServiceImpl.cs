@@ -30,6 +30,7 @@ namespace OneStopOfficeBE.Services.Impl
         public BaseResponse EfficientStaffs(int? number)
         {
             List<EfficientStaffDto> list = _context.Users
+            .Where(u => u.IsAdmin && !u.IsSuperAdmin)
             .Select(u => new EfficientStaffDto
             {
                 UserId = u.UserId,

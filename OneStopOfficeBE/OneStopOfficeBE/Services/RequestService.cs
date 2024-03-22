@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data;
+using Microsoft.AspNetCore.Mvc;
 using OneStopOfficeBE.DTOs;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
@@ -17,10 +18,12 @@ namespace OneStopOfficeBE.Services
 
         BaseResponse CancelRequest(string id);
 
-        BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset, string status, string sortBy, string sortOption);
+        BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset, string status, string? sortBy, string? sortOption);
 
         BaseResponse GetRequestDetail(int id);
 
         BaseResponse UpdateRequestStatus(UpdateStatusRequest request, UserExtracted? user);
+
+        DataTable GetData();
     }
 }

@@ -106,49 +106,25 @@ namespace OneStopOfficeBE.Services.Impl
             };
         }
 
-        public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset, string status, string sortBy = "created_at")
+        public BaseResponse GetRequestByUsername(UserExtracted? user, int limit, int offset, string status, string sortBy = "created_at", string sortOption = "asc")
         {
-            string? username = user?.Username;
-            List<Request> requestList = new List<Request>();
-            switch (user?.IsAdmin)
+            List<RequestListResponseDto> responseList = GetRequestByUsername(user, status)
+                .Skip(offset)
+                .Take(limit)
+                .ToList();
+            switch (sortOption)
             {
-                case false:
-                    requestList = _context.Requests
-                        .Include(r => r.Category)
-                        .Include(r => r.AssignedToNavigation)
-                        // .ThenInclude(c => c.staff)
-                        .Where(r => r.UserId == username && r.Status == status)
-                        .Skip(offset)
-                        .Take(limit)
-                        .OrderBy(r => r.CreatedAt)
-                        .ToList();
+                case "desc":
+                    responseList = responseList.OrderByDescending(item => item.SubmittedAt).ToList();
                     break;
-                case true:
-                    requestList = _context.Requests
-                        .Include(r => r.Category)
-                        // .ThenInclude(c => c.staff)
-                        .Where(r => r.UserId != username && r.AssignedTo == user.Username && (r.Status == status || status == null))
-                        .Skip(offset)
-                        .Take(limit)
-                        .OrderBy(r => r.CreatedAt)
-                        .ToList();
+                case "asc":
+                    responseList = responseList.OrderBy(item => item.SubmittedAt).ToList();
                     break;
-
+                default: break;
             }
-            List<RequestListResponseDto> responseList = requestList.Select(item =>
-                new RequestListResponseDto
-                {
-                    Id = item.RequestId,
-                    Category = item.Category.CategoryName,
-                    Reason = item.Reason,
-                    ProcessNote = item.ProcessNote,
-                    ProcessedAt = null,
-                    File = item.Attachment,
-                    Status = item.Status,
-                }
-            ).ToList();
             return BaseResponse.Success(responseList);
         }
+
 
         public BaseResponse UpdateRequest(string id)
         {
@@ -227,5 +203,44 @@ namespace OneStopOfficeBE.Services.Impl
                 Status = request.Status,
             });
         }
+
+        public List<RequestListResponseDto> GetRequestByUsername(UserExtracted? user, string status)
+        {
+            string? username = user?.Username;
+            List<Request> requestList = _context.Requests
+                .Include(r => r.AssignedToNavigation)
+                .Include(r => r.Category)
+                .ToList();
+            switch (user?.IsAdmin)
+            {
+                case false:
+                    requestList = requestList
+                        .Where(r => r.UserId == username && r.Status == status)
+                        .ToList();
+                    break;
+                case true:
+                    if (!(bool)user?.IsSuperAdmin)
+                    {
+                        requestList = requestList
+                            .Where(r => r.UserId != username && r.AssignedTo == user.Username && (r.Status == status || status == null))
+                            .ToList();
+                    }
+                    break;
+
+            }
+            List<RequestListResponseDto> responseList = requestList.Select(item =>
+                new RequestListResponseDto
+                {
+                    Id = item.RequestId,
+                    Category = item.Category.CategoryName,
+                    Reason = item.Reason,
+                    ProcessNote = item.ProcessNote,
+                    ProcessedAt = item.CreatedAt,
+                    File = item.Attachment,
+                    Status = item.Status,
+                }).ToList();
+            return responseList;
+        }
+
     }
 }

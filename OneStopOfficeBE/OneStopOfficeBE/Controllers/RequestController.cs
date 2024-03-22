@@ -53,7 +53,8 @@ namespace OneStopOfficeBE.Controllers
             [FromQuery] int limit = 10,
             [FromQuery] int offset = 0,
             [FromQuery] string? status = "Submitted",
-            [FromQuery] string? sortBy = "created_at"
+            [FromQuery] string? sortBy = "created_at",
+            [FromQuery] string? sortOption = "asc"
         )
         {
             UserExtracted? user = JwtHelper.extractUser(jsonClaims);

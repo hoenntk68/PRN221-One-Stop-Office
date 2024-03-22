@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import service from "../plugins/service"
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import Cookies from 'js-cookie'
-import router from '@/router'
 import { mixinMethods, $notify } from '@/utils/variables';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -18,6 +17,23 @@ export const useAuthStore = defineStore('auth', () => {
         isAdmin: false,
         isSuperAdmin: false,
     })
+
+    const listUser = ref([]);
+
+    const getUserList = () => {
+        mixinMethods.startLoading();
+        service.user.staff(
+            {},
+            (res) => {
+                listUser.value = res;
+                mixinMethods.endLoading();
+            },
+            (err) => {
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
+            }
+        )
+    }
 
     const authLogin = () => {
         mixinMethods.startLoading();
@@ -58,5 +74,7 @@ export const useAuthStore = defineStore('auth', () => {
         authLogin,
         authLogout,
         state,
+        listUser,
+        getUserList,
     }
 })

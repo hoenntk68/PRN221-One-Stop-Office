@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import service from "../plugins/service"
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { mixinMethods, $notify } from '@/utils/variables';
 
 export const useRequestStore = defineStore('request', () => {
@@ -17,6 +17,10 @@ export const useRequestStore = defineStore('request', () => {
     const requestState = reactive({
         currentRequestId: 0,
         ProcessNote: '',
+        choosenUser: '',
+    });
+    const selectedItems = reactive({
+        data: [],
     });
 
     const requestModel = reactive({
@@ -25,10 +29,44 @@ export const useRequestStore = defineStore('request', () => {
         'attachment': '',
     })
 
+    const requestFilter = reactive({
+        'status': 'Submitted',
+        'orderBy': 'desc',
+        'sortBy': '',
+        'sortOption': '',
+        'categoryId': '0',
+    });
+
+    const assignRequest = async () => {
+        mixinMethods.startLoading();
+        let data = {
+            "Requests": selectedItems.data,
+            "AssignedTo": requestState.choosenUser,
+        }
+        console.log(data);
+        service.request.assignRequest(
+            data,
+            (res) => {
+                mixinMethods.endLoading();
+                $notify.success(res.message || 'success');
+                getRequestList();
+            },
+            (err) => {
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
+            }
+        );
+    }
+
+
     const getRequestList = () => {
         mixinMethods.startLoading();
         service.request.getRequestList(
-            {},
+            {
+                status: requestFilter.status,
+                orderBy: requestFilter.orderBy,
+                categoryId: requestFilter.categoryId,
+            },
             (res) => {
                 requestList.data = res;
                 mixinMethods.endLoading();
@@ -46,6 +84,8 @@ export const useRequestStore = defineStore('request', () => {
             {
                 limit: 10,
                 offset: requestList.data.length,
+                status: requestFilter.status,
+                orderBy: requestFilter.orderBy,
             },
             (res) => {
                 requestList.data = requestList.data.concat(res);
@@ -108,13 +148,18 @@ export const useRequestStore = defineStore('request', () => {
         )
     }
 
-    const updateRequestStatus = async (status) => {
+    const updateRequestStatus = async (status, statusNote = '') => {
         mixinMethods.startLoading();
+        const requestData = {
+            "RequestId": requestState.currentRequestId,
+            "Status": status,
+        };
+        if (statusNote !== '') {
+            requestData["ProcessNote"] = statusNote;
+        }
+
         service.request.updateRequest(
-            {
-                "RequestId": requestState.currentRequestId,
-                "Status": status,
-            },
+            requestData,
             (res) => {
                 mixinMethods.endLoading();
                 $notify.success(res.message || 'success');
@@ -124,7 +169,26 @@ export const useRequestStore = defineStore('request', () => {
                 mixinMethods.endLoading();
                 $notify.error(err.responseCode || 'error');
             }
-        )
+        );
+    }
+
+    const exportData = () => {
+        mixinMethods.startLoading();
+        service.request.exportRequest(
+            {
+                status: requestFilter.status,
+                orderBy: requestFilter.orderBy,
+                categoryId: requestFilter.categoryId,
+            },
+            (res) => {
+                mixinMethods.endLoading();
+                $notify.success(res.message || 'success');
+            },
+            (err) => {
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
+            }
+        );
     }
 
     return {
@@ -139,5 +203,9 @@ export const useRequestStore = defineStore('request', () => {
         getRequestDetail,
         requestState,
         updateRequestStatus,
+        requestFilter,
+        selectedItems,
+        exportData,
+        assignRequest,
     }
 })

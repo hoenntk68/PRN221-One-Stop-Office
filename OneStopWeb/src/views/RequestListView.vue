@@ -1,34 +1,98 @@
 <template>
   <div class="requestList">
     <RequestTable :requestList="request"></RequestTable>
-    <div>
-      <button @click="loadmore">loadmore</button>
+    <div class="botton-btn">
+      <el-button @click="loadmore">Tải Thêm</el-button>
+      <el-button @click="handleAssign()">Gán cho staff</el-button>
+      <el-button @click="handleExport()">Xuất dữ liệu</el-button>
     </div>
+
+    <el-dialog title="Shipping address" width="500" v-model="dialogFormVisible" style="z-index: 1000000;">
+      <template #default>
+        <el-select v-model="requestState.choosenUser" laceholder="Please select a staff">
+          <el-option v-for="item in listUser" :key="item.userId" :label="item.fullName" :value="item.userId" />
+        </el-select>
+      </template>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">Hủy</el-button>
+          <el-button type="primary" @click="confirmAssign()">Đồng ý</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
+
 <script>
 import RequestTable from '@/components/RequestTable.vue'
 import { useRequestStore } from '@/stores/request.js'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useAuthStore } from '@/stores/auth';
+
 export default {
+  components: { RequestTable },
   setup() {
     const requestStore = useRequestStore()
 
-    const { getRequestList, loadmore } = requestStore
+    const authStore = useAuthStore();
+    const {
+      getUserList,
+    } = authStore;
+    const listUser = computed(() => authStore.listUser)
+
+    const { getRequestList, loadmore, selectedItems, requestState } = requestStore
 
     const request = computed(() => requestStore.requestList.data)
+    const filters = computed(() => requestStore.requestFilter)
+
+    const dialogFormVisible = ref(false)
+
+    const handleAssign = () => {
+      dialogFormVisible.value = true;
+      console.log('selectedItems', selectedItems)
+    }
+
+    const confirmAssign = () => {
+      requestStore.assignRequest();
+    }
+
+    const handleExport = () => {
+      requestStore.exportData();
+    }
+
 
     onMounted(async () => {
-      getRequestList()
+      getRequestList();
+      getUserList();
     })
 
     return {
       getRequestList,
       loadmore,
-      request
+      request,
+      selectedItems,
+      handleAssign,
+      dialogFormVisible,
+      filters,
+      handleExport,
+      listUser,
+      getUserList,
+      requestState,
+      confirmAssign,
     }
-  },
-  components: { RequestTable }
+  }
 }
 </script>
-<style></style>
+
+<style lang="scss">
+.botton-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+
+  button {
+    margin: 0 8px;
+  }
+}
+</style>

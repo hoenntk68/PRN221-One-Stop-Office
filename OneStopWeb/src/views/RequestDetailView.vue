@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button style="position: fixed;">
+        <el-button style="position: fixed;" @click="$router.push('/request-list')">
             &lt;
         </el-button>
         <div class="rDetails">
@@ -26,10 +26,12 @@
                     <p>Quy trình xử lý: {{ requestDetail.data.processNote }}</p>
                 </div>
             </main>
-            <nav>
-                <el-input type="textarea" placeholder="Enter your comment" />
-                <el-button type="primary">Approve</el-button>
-                <el-button type="danger">Reject</el-button>
+            <nav v-if="state.isAdmin">
+                <el-input type="textarea" v-model="statusNote" placeholder="Enter your comment" />
+                <el-button type="primary"
+                    @click="processRequest(requestDetail.data.requestId, 'Approved')">Approve</el-button>
+                <el-button type="danger"
+                    @click="processRequest(requestDetail.data.requestId, 'Rejected')">Reject</el-button>
             </nav>
         </div>
     </div>
@@ -38,7 +40,7 @@
 <script>
 import { useAuthStore } from '@/stores/auth';
 import { useRequestStore } from '@/stores/request';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -46,11 +48,14 @@ export default {
         const router = useRouter();
         const { state } = useAuthStore();
 
+        const requestStore = useRequestStore();
         const {
             getRequestDetail,
             requestDetail,
-            // updateRequestStatus,
-        } = useRequestStore();
+            updateRequestStatus,
+        } = requestStore;
+
+        const statusNote = ref('');
 
         const downloadAttachment = (id) => {
             let baseURL = import.meta.env.VITE_BASE_URL;
@@ -69,6 +74,10 @@ export default {
             getRequestDetail(currentId);
         });
 
+        const processRequest = (id, status) => {
+            requestStore.requestState.currentRequestId = id;
+            updateRequestStatus(status, statusNote.value);
+        }
 
         return {
             requestDetail,
@@ -76,6 +85,8 @@ export default {
             getRequestDetail,
             downloadAttachment,
             removePathPrefix,
+            statusNote,
+            processRequest,
         }
     }
 }

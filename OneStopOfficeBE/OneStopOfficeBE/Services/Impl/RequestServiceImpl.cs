@@ -245,7 +245,8 @@ namespace OneStopOfficeBE.Services.Impl
                     Category = item.Category.CategoryName,
                     Reason = item.Reason,
                     ProcessNote = item.ProcessNote,
-                    ProcessedAt = item.CreatedAt,
+                    SubmittedAt = item.CreatedAt,
+                    ProcessedAt = item.UpdateAt,
                     File = item.Attachment,
                     Status = item.Status,
                 }).ToList();

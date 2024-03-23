@@ -1,6 +1,7 @@
 ﻿using OneStopOfficeBE.DTOs;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
+using OneStopOfficeBE.Models;
 
 namespace OneStopOfficeBE.Services
 {
@@ -10,5 +11,6 @@ namespace OneStopOfficeBE.Services
         BaseResponse Login(LoginRequestDto loginRequest);
         BaseResponse Logout(UserExtracted? user);
         BaseResponse GetAdmins();
+        User? FindByUsername(string username);
     }
 }

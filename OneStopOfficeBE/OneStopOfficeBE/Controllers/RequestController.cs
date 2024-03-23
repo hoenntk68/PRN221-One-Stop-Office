@@ -1,10 +1,12 @@
-﻿using ClosedXML.Excel;
+﻿using System.IdentityModel.Tokens.Jwt;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using OneStopOfficeBE.Constants;
 using OneStopOfficeBE.CustomAttributes;
 using OneStopOfficeBE.DTOs;
 using OneStopOfficeBE.DTOs.Request;
 using OneStopOfficeBE.DTOs.Response;
+using OneStopOfficeBE.Models;
 using OneStopOfficeBE.Services;
 using OneStopOfficeBE.Utils;
 
@@ -15,6 +17,8 @@ namespace OneStopOfficeBE.Controllers
     public class RequestController : Controller
     {
         private RequestService _requestService;
+
+        private UserService _userService;
 
         public RequestController(RequestService requestService)
         {
@@ -97,24 +101,30 @@ namespace OneStopOfficeBE.Controllers
         }
 
         [HttpGet("export")]
-        [ValidateToken]
+        // [ValidateToken]
         public ActionResult ExportRequest(
-            string? jsonClaims,
+            string? token,
             [FromQuery] string? status = "Submitted",
             [FromQuery] string? sortBy = "created_at",
             [FromQuery] string? sortOption = "asc",
             [FromQuery] string? categoryId = "0"
         )
         {
-            if (jsonClaims == null)
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tok = tokenHandler.ReadJwtToken(token);
+            var username = tok.Claims.FirstOrDefault(claim => claim.Type == "Username")?.Value;
+            var isAd = tok.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin")?.Value;
+            var isSuperAd = tok.Claims.FirstOrDefault(claim => claim.Type == "IsSuperAdmin")?.Value;
+            if (username == null)
             {
                 return Unauthorized(ErrorMessageConstant.UNAUTHORIZED);
             }
-            UserExtracted? user = JwtHelper.extractUser(jsonClaims);
-            if (user == null)
+            UserExtracted user = new UserExtracted()
             {
-                return Unauthorized(ErrorMessageConstant.UNAUTHORIZED);
-            }
+                Username = username,
+                IsAdmin = isAd == "True",
+                IsSuperAdmin = isSuperAd == "True"
+            };
             int cateId = int.Parse(categoryId);
             string fileName = "Request_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
             var table = _requestService.GetData(user, status, cateId, sortBy, sortOption);
@@ -124,7 +134,8 @@ namespace OneStopOfficeBE.Controllers
                 using (MemoryStream stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
-                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName, true);
                 }
             }
         }

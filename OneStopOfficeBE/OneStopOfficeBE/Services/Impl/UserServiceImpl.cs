@@ -24,6 +24,12 @@ namespace OneStopOfficeBE.Services.Impl
             _appSettings = appSettings.CurrentValue;
         }
 
+        public User? FindByUsername(string username)
+        {
+            User? user = _context.Users.FirstOrDefault(u => u.UserId == username);
+            return user;
+        }
+
         public BaseResponse GetAdmins()
         {
             List<AdminInfoDto> admins = _context.Users

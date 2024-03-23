@@ -10,6 +10,7 @@ const API_CODE = {
     API_RQ_004: "Request/update/",
     API_RQ_005: "Request/export",
     API_RQ_006: "Request/assign",
+    API_RQ_007: "Request/reassign",
 
     //cate
     API_CT_001: "Category/",
@@ -19,6 +20,8 @@ const API_CODE = {
     API_STA_002: "Statistic/request-per-category",
     API_STA_003: "Statistic/efficient-staffs",
     API_STA_004: "Statistic/general-stats",
+    API_STA_005: "Statistic/request-by-status",
+    API_STA_006: "Statistic/process-time-stats",
 };
 
 export default API_CODE;

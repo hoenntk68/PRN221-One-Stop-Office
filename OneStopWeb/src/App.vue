@@ -46,11 +46,6 @@ if (Cookies.get('token')) {
               Tra cuu
             </router-link>
           </li>
-          <li>
-            <router-link to="/request-list">
-              Requests
-            </router-link>
-          </li>
           <li v-if="state.isAdmin">
             <router-link to="/request-list">
               Users

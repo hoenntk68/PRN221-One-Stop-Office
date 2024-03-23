@@ -15,5 +15,6 @@ namespace OneStopOfficeBE.DTOs.Response
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set; }
         public string? Status { get; set; }
+        public string? Assignee { get; set; }
     }
 }

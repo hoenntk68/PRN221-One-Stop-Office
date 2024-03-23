@@ -30,4 +30,9 @@ export default class RequestAPI extends BaseService {
     assignRequest(params = {}, success, error) {
         this.patch(API_CODE.API_RQ_006, success, error, params);
     }
+
+    reAssign(params = {}, success, error) {
+        this.patch(API_CODE.API_RQ_007, success, error, params);
+    }
+
 }

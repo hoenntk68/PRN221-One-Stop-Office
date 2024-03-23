@@ -156,7 +156,8 @@ namespace OneStopOfficeBE.Services.Impl
                 Attachment = request.Attachment,
                 CreatedAt = request.CreatedAt,
                 UpdateAt = request.UpdateAt,
-                Status = request.Status
+                Status = request.Status,
+                Assignee = request.AssignedTo,
             };
             return BaseResponse.Success(response);
         }

@@ -12,5 +12,10 @@ export default class StatisticAPI extends BaseService {
     getGeneralStat(params = {}, success, error) {
         this.get(API_CODE.API_STA_004, success, error, params);
     }
-
+    getStatusState(params = {}, success, error) {
+        this.get(API_CODE.API_STA_005, success, error, params);
+    }
+    getTimeStat(params = {}, success, error) {
+        this.get(API_CODE.API_STA_006, success, error, params);
+    }
 }

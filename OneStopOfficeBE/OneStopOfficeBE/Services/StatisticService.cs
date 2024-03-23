@@ -9,5 +9,6 @@ namespace OneStopOfficeBE.Services
         BaseResponse EfficientStaffs(int? take);
         BaseResponse GeneralStats();
         BaseResponse RequestCountByStatus();
+        BaseResponse ProcessTimeStats();
     }
 }

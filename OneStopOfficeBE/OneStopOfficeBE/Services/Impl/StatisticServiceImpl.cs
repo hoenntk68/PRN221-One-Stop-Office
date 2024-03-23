@@ -1,5 +1,6 @@
 using OneStopOfficeBE.DTOs.Response;
 using OneStopOfficeBE.Models;
+using OneStopOfficeBE.Utils;
 
 namespace OneStopOfficeBE.Services.Impl
 {
@@ -69,6 +70,36 @@ namespace OneStopOfficeBE.Services.Impl
                 RequestCount = s.Count()
             }).ToList();
             return BaseResponse.Success(list);
+        }
+
+        public BaseResponse ProcessTimeStats()
+        {
+            List<RequestProcessTimeDto> requests = _context.Requests
+                .Where(r => r.CreatedAt != r.UpdateAt)
+                .Select(r => new RequestProcessTimeDto()
+                {
+                    RequestId = r.RequestId,
+                    ProcessTime = (TimeSpan)(r.UpdateAt - r.CreatedAt),
+                })
+                .ToList();
+
+            TimeSpan? avgTime = requests.Any() ? TimeSpan.FromTicks((long)requests.Average(r => r.ProcessTime.Ticks)) : (TimeSpan?)null;
+            RequestProcessTimeDto? avg = new RequestProcessTimeDto() {
+                ProcessTime = (TimeSpan)avgTime,
+                DayCount = (int)avgTime?.Days,
+                HourCount = (int)avgTime?.Hours,
+                MinuteCount = (int)avgTime?.Minutes,
+            };
+            RequestProcessTimeDto? min = requests.OrderBy(r => r.ProcessTime).FirstOrDefault();
+            min = TimeHelper.SetTimeSpanProp(min);
+            RequestProcessTimeDto? max = requests.OrderByDescending(r => r.ProcessTime).FirstOrDefault();
+            max = TimeHelper.SetTimeSpanProp(max);
+            ProcessTimeStatsDto response = new ProcessTimeStatsDto() {
+                Avg = avg,
+                Max = max,
+                Min = min
+            };
+            return BaseResponse.Success(response);
         }
     }
 }

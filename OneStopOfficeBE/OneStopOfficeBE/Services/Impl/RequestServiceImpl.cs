@@ -326,5 +326,25 @@ namespace OneStopOfficeBE.Services.Impl
             _context.SaveChanges();
             return BaseResponse.Success();
         }
+
+        public BaseResponse ReassignRequests(ReassignRequestDto request)
+        {
+            Request? requestFound = _context.Requests
+            .FirstOrDefault(r => r.RequestId == request.RequestId);
+            if (requestFound == null)
+            {
+                return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED);
+            }
+            User? newAssignee = _context.Users
+            .FirstOrDefault(u => u.UserId == request.AssignedTo);
+            if (newAssignee == null)
+            {
+                return BaseResponse.Error(ErrorMessageConstant.INVALID_ASSIGNEE);
+            }
+            requestFound.AssignedTo = request.AssignedTo;
+            _context.Requests.Update(requestFound);
+            _context.SaveChanges();
+            return BaseResponse.Success();
+        }
     }
 }

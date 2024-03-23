@@ -33,8 +33,15 @@ namespace OneStopOfficeBE.Controllers
         }
 
         [HttpGet("request-by-status")]
-        public BaseResponse RequestCountByStatus() {
+        public BaseResponse RequestCountByStatus()
+        {
             return _statisticService.RequestCountByStatus();
+        }
+
+        [HttpGet("process-time-stats")]
+        public BaseResponse ProcessTimeStats()
+        {
+            return _statisticService.ProcessTimeStats();
         }
     }
 }

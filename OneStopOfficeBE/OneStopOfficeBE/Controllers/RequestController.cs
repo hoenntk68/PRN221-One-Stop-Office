@@ -155,5 +155,20 @@ namespace OneStopOfficeBE.Controllers
             }
             return _requestService.AssignRequests(request);
         }
+
+        [HttpPatch("reassign")]
+        [ValidateToken]
+        public BaseResponse Reassign(string? jsonClaims, ReassignRequestDto request) {
+                        if (jsonClaims == null)
+            {
+                return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED);
+            }
+            UserExtracted? user = JwtHelper.extractUser(jsonClaims);
+            if (user == null || !(bool)user.IsSuperAdmin)
+            {
+                return BaseResponse.Error(ErrorMessageConstant.UNAUTHORIZED);
+            }
+            return _requestService.ReassignRequests(request);
+        }
     }
 }

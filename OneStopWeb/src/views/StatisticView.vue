@@ -8,8 +8,21 @@
                 </div>
             </div>
             <div class="chart-container" style="background-color: #a2c5db;">
-                <h1>Processed / Total Request: </h1>
-                {{ generalStat }}
+                <!-- {{ timeStat }} -->
+                <table v-if="timeStat">
+                    <tr>
+                        <th>Thời gian xử lí trung bình: </th>
+                        <td>{{ timeStat.avg.hourCount }} : {{ timeStat.avg.minuteCount }}</td>
+                    </tr>
+                    <tr>
+                        <th>Thời gian xử lí nhanh nhất: </th>
+                        <td>{{ timeStat.min.hourCount }} : {{ timeStat.avg.minuteCount }}</td>
+                    </tr>
+                    <tr>
+                        <th>Thời gian xử lí chậm nhất: </th>
+                        <td>{{ timeStat.max.hourCount }} : {{ timeStat.avg.minuteCount }}</td>
+                    </tr>
+                </table>
             </div>
             <div class="chart-container" style="background-color: #f2e9f2; text-align: left;">
                 <table>
@@ -71,7 +84,7 @@ export default {
                 labels: cateLabel.value,
                 datasets: [
                     {
-                        label: 'Data One',
+                        label: 'số yều cầu / loại hồ sơ',
                         backgroundColor: '#f87979',
                         data: cateValue.value,
                         borderRadius: 10
@@ -127,7 +140,7 @@ export default {
                 labels: pieLabel.value,
                 datasets: [
                     {
-                        label: 'Data One',
+                        label: '',
                         backgroundColor: ['#f87979', '#f8e979', '#79f8e9', '#7979f8', '#f879f8'],
                         data: pieValue.value,
                         borderRadius: 10
@@ -154,7 +167,7 @@ export default {
                 labels: staffLabel.value,
                 datasets: [
                     {
-                        label: 'Data One',
+                        label: 'số yêu cầu được giao cho',
                         backgroundColor: '#f87979',
                         data: staffValue.value,
                         borderRadius: 10
@@ -178,7 +191,7 @@ export default {
             },
             scales: {
                 x: {
-                    display: false
+                    // display: false
                 }
             }
         });
@@ -219,12 +232,48 @@ export default {
             }
         }
 
+        const timeStat = ref('');
+        const getTimeStat = () => {
+            try {
+                service.statistic.getTimeStat(
+                    {},
+                    (response) => {
+                        timeStat.value = response;
+                    },
+                    (error) => {
+                        $notify.error('Error', error);
+                    }
+                )
+            } catch (error) {
+                $notify.error('Error', error);
+            }
+        }
+
+        const getPieData = () => {
+            try {
+                service.statistic.getStatusState(
+                    {},
+                    (response) => {
+                        pieLabel.value = response.map((item) => item.status);
+                        pieValue.value = response.map((item) => item.requestCount);
+                    },
+                    (error) => {
+                        $notify.error('Error', error);
+                    }
+                )
+            } catch (error) {
+                $notify.error('Error', error);
+            }
+        }
+
         onMounted(() => {
             getCateStatistic();
             getStaffEf();
             getGeneralStat();
-            pieLabel.value = ['Red', 'Yellow', 'Blue', 'Green', 'Purple'];
-            pieValue.value = [12, 19, 3, 5, 2];
+            getPieData();
+            getTimeStat();
+            // pieLabel.value = ['Red', 'Yellow', 'Blue', 'Green', 'Purple'];
+            // pieValue.value = [12, 19, 3, 5, 2];
         });
 
         return {
@@ -236,6 +285,8 @@ export default {
             staffOptions,
             getGeneralStat,
             generalStat,
+            getTimeStat,
+            timeStat,
         };
     }
 };

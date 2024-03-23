@@ -4,7 +4,7 @@
     <div class="botton-btn">
       <el-button @click="loadmore">Tải Thêm</el-button>
       <el-button @click="handleAssign()">Gán cho staff</el-button>
-      <el-button @click="handleExport()">Xuất dữ liệu</el-button>
+      <el-button @click="export2()">Xuất dữ liệu</el-button>
     </div>
 
     <el-dialog title="Shipping address" width="500" v-model="dialogFormVisible" style="z-index: 1000000;">
@@ -29,6 +29,7 @@ import RequestTable from '@/components/RequestTable.vue'
 import { useRequestStore } from '@/stores/request.js'
 import { computed, onMounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth';
+import Cookies from 'js-cookie';
 
 export default {
   components: { RequestTable },
@@ -61,6 +62,19 @@ export default {
       requestStore.exportData();
     }
 
+    const export2 = () => {
+      let baseURL = import.meta.env.VITE_BASE_URL;
+      let token = Cookies.get('token');
+      let status = 1;
+      if (!token) {
+        console.error("Token not found. Please log in.");
+        return;
+      }
+      // let exportURL = `${baseURL}/Request/export?jsonClaims=${token}&status=Cancelled&sortOption=desc`;
+      let exportURL = `${baseURL}/Request/export?token=${token}&status=${requestStore.requestFilter.status}&sortBy=${requestStore.requestFilter.sortBy}&sortOption=${requestStore.requestFilter.orderBy}&categoryId=${requestStore.requestFilter.categoryId}`;
+      window.location.href = exportURL;
+    }
+
 
     onMounted(async () => {
       getRequestList();
@@ -80,6 +94,7 @@ export default {
       getUserList,
       requestState,
       confirmAssign,
+      export2,
     }
   }
 }

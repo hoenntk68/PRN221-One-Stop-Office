@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import service from "../plugins/service"
 import { reactive, ref } from 'vue'
 import { mixinMethods, $notify } from '@/utils/variables';
+import router from '@/router';
 
 export const useRequestStore = defineStore('request', () => {
 
@@ -10,6 +11,7 @@ export const useRequestStore = defineStore('request', () => {
     });
     const requestDetail = reactive({
         data: [],
+        assigned: '',
     });
     const cateList = reactive({
         data: [],
@@ -33,7 +35,7 @@ export const useRequestStore = defineStore('request', () => {
         'status': 'Submitted',
         'orderBy': 'desc',
         'sortBy': '',
-        'sortOption': '',
+        'sortOption': 'desc',
         'categoryId': '0',
     });
 
@@ -58,14 +60,32 @@ export const useRequestStore = defineStore('request', () => {
         );
     }
 
+    const reAssign = async (data) => {
+        mixinMethods.startLoading();
+        service.request.reAssign(
+            data,
+            (res) => {
+                mixinMethods.endLoading();
+                $notify.success(res.message || 'success');
+                getRequestList();
+                router.push('/request-list');
+            },
+            (err) => {
+                mixinMethods.endLoading();
+                $notify.error(err.responseCode || 'error');
+            }
+        );
+    }
 
     const getRequestList = () => {
         mixinMethods.startLoading();
         service.request.getRequestList(
             {
+                limit: 10,
                 status: requestFilter.status,
                 orderBy: requestFilter.orderBy,
                 categoryId: requestFilter.categoryId,
+                sortOption: requestFilter.sortOption,
             },
             (res) => {
                 requestList.data = res;
@@ -86,6 +106,8 @@ export const useRequestStore = defineStore('request', () => {
                 offset: requestList.data.length,
                 status: requestFilter.status,
                 orderBy: requestFilter.orderBy,
+                categoryId: requestFilter.categoryId,
+                sortOption: requestFilter.sortOption,
             },
             (res) => {
                 requestList.data = requestList.data.concat(res);
@@ -105,6 +127,7 @@ export const useRequestStore = defineStore('request', () => {
             {},
             (res) => {
                 requestDetail.data = res;
+                requestDetail.assigned = res.assignee;
                 mixinMethods.endLoading();
             },
             (err) => {
@@ -164,6 +187,7 @@ export const useRequestStore = defineStore('request', () => {
                 mixinMethods.endLoading();
                 $notify.success(res.message || 'success');
                 getRequestList();
+                router.push('/request-list');
             },
             (err) => {
                 mixinMethods.endLoading();
@@ -207,5 +231,6 @@ export const useRequestStore = defineStore('request', () => {
         selectedItems,
         exportData,
         assignRequest,
+        reAssign,
     }
 })

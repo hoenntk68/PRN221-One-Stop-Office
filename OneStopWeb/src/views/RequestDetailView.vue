@@ -5,7 +5,11 @@
         </el-button>
         <div class="rDetails">
             <main class="content">
+                <h3>Cộng Hòa Xã Hội Chủ Nghĩa Việt Nam</h3>
+                <h3>Độc Lập - Tự Do - Hạnh Phúc</h3>
                 <h1>{{ requestDetail.data.categoryName }}</h1>
+                <br />
+                <!-- {{ requestDetail }} -->
                 <div class="formRequest">
                     <p>kính gửi cơ quan chính phủ</p>
                     <p>Tôi: {{ requestDetail.data.userFullName || '-' }} </p>
@@ -26,12 +30,22 @@
                     <p>Quy trình xử lý: {{ requestDetail.data.processNote }}</p>
                 </div>
             </main>
-            <nav v-if="state.isAdmin">
+            <nav
+                v-if="state.isAdmin && requestDetail.data.status != 'Approved' && requestDetail.data.status != 'Rejected'">
                 <el-input type="textarea" v-model="statusNote" placeholder="Enter your comment" />
                 <el-button type="primary"
                     @click="processRequest(requestDetail.data.requestId, 'Approved')">Approve</el-button>
                 <el-button type="danger"
                     @click="processRequest(requestDetail.data.requestId, 'Rejected')">Reject</el-button>
+            </nav>
+            <nav>
+                <el-select v-model="requestDetail.assigned" placeholder="Select status">
+                    <el-option v-for="item in listUser" :key="item.userId" :label="item.fullName"
+                        :value="item.userId"></el-option>
+                </el-select>
+                <el-button type="primary" @click="reassign()">
+                    Update
+                </el-button>
             </nav>
         </div>
     </div>
@@ -40,13 +54,16 @@
 <script>
 import { useAuthStore } from '@/stores/auth';
 import { useRequestStore } from '@/stores/request';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
     setup() {
         const router = useRouter();
-        const { state } = useAuthStore();
+        const authStore = useAuthStore();
+        const { state, getUserList, reAssign } = authStore;
+
+        const listUser = computed(() => authStore.listUser);
 
         const requestStore = useRequestStore();
         const {
@@ -72,6 +89,7 @@ export default {
         onMounted(() => {
             let currentId = router.currentRoute.value.params.id;
             getRequestDetail(currentId);
+            getUserList();
         });
 
         const processRequest = (id, status) => {
@@ -79,7 +97,16 @@ export default {
             updateRequestStatus(status, statusNote.value);
         }
 
+        const reassign = () => {
+            let data = {
+                request_id: router.currentRoute.value.params.id,
+                assigned_to: requestDetail.assigned,
+            }
+            requestStore.reAssign(data);
+        }
+
         return {
+            reassign,
             requestDetail,
             state,
             getRequestDetail,
@@ -87,6 +114,9 @@ export default {
             removePathPrefix,
             statusNote,
             processRequest,
+            listUser,
+            getUserList,
+            reAssign,
         }
     }
 }
@@ -103,7 +133,7 @@ export default {
         justify-content: center;
         align-items: center;
         padding: 0;
-        max-width: 1200px;
+        max-width: 1000px;
 
 
         padding: 4rem;

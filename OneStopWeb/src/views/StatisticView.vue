@@ -9,9 +9,31 @@
             </div>
             <div class="chart-container" style="background-color: #a2c5db;">
                 <h1>Processed / Total Request: </h1>
+                {{ generalStat }}
             </div>
-            <div class="chart-container" style="background-color: #f2e9f2;">
-                <h1>Total Cong Dan: </h1>
+            <div class="chart-container" style="background-color: #f2e9f2; text-align: left;">
+                <table>
+                    <tr>
+                        <th>Số request: </th>
+                        <td>{{ generalStat.requestCount }}</td>
+                    </tr>
+                    <tr>
+                        <th>Số dân: </th>
+                        <td>{{ generalStat.adminCount }}</td>
+                    </tr>
+                    <tr>
+                        <th>Số nhân viên: </th>
+                        <td>{{ generalStat.clientCount }}</td>
+                    </tr>
+                    <tr>
+                        <th>Số người dùng: </th>
+                        <td>{{ generalStat.userSystemCount }}</td>
+                    </tr>
+                    <tr>
+                        <th>Số loại hồ sơ phục vụ: </th>
+                        <td>{{ generalStat.categoryCount }}</td>
+                    </tr>
+                </table>
             </div>
 
         </div>
@@ -62,8 +84,16 @@ export default {
             responsive: true,
             plugins: {
                 legend: {
-                    display: false
-                }
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: 'Các loại hồ sơ phục vụ',
+                    font: {
+                        size: 16
+                    },
+                    position: 'bottom',
+                },
             },
             scales: {
                 x: {
@@ -112,6 +142,7 @@ export default {
                 legend: {
                     position: 'right'
                 }
+
             }
         });
 
@@ -137,7 +168,12 @@ export default {
             responsive: true,
             plugins: {
                 legend: {
-                    display: false
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: 'Top nhân viên xuất sắc',
+                    position: 'bottom',
                 }
             },
             scales: {
@@ -152,9 +188,27 @@ export default {
                 service.statistic.getStaffEf(
                     {},
                     (response) => {
-                        console.log(response);
                         staffLabel.value = response.map((item) => item.fullName);
                         staffValue.value = response.map((item) => item.requestCount);
+                    },
+                    (error) => {
+                        $notify.error('Error', error);
+                    }
+                )
+            } catch (error) {
+                $notify.error('Error', error);
+            }
+        }
+
+        const generalStat = ref('');
+
+        const getGeneralStat = () => {
+            try {
+                service.statistic.getGeneralStat(
+                    {},
+                    (response) => {
+                        console.log('response', response);
+                        generalStat.value = response;
                     },
                     (error) => {
                         $notify.error('Error', error);
@@ -168,6 +222,7 @@ export default {
         onMounted(() => {
             getCateStatistic();
             getStaffEf();
+            getGeneralStat();
             pieLabel.value = ['Red', 'Yellow', 'Blue', 'Green', 'Purple'];
             pieValue.value = [12, 19, 3, 5, 2];
         });
@@ -178,7 +233,9 @@ export default {
             pieData,
             pieOptions,
             staffData,
-            staffOptions
+            staffOptions,
+            getGeneralStat,
+            generalStat,
         };
     }
 };
@@ -198,6 +255,12 @@ export default {
         padding: 1rem;
         display: flex;
         justify-content: left;
+
+        td {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding-left: 2rem;
+        }
     }
 
     .up {

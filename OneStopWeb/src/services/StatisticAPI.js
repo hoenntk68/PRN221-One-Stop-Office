@@ -9,5 +9,8 @@ export default class StatisticAPI extends BaseService {
     getStaffEf(params = {}, success, error) {
         this.get(API_CODE.API_STA_003, success, error, params);
     }
+    getGeneralStat(params = {}, success, error) {
+        this.get(API_CODE.API_STA_004, success, error, params);
+    }
 
 }

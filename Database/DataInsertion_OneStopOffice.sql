@@ -88,84 +88,231 @@ VALUES
 	(N'Hồ sơ khai thác và sử dụng thông tin, dữ liệu tài nguyên và môi trường', N'');
 
 
-INSERT INTO Staff_Category
-	(user_id, category_id)
-VALUES
-	('111111111111', 1),
-	('111111111111', 2),
-	('222222222222', 3),
-	('222222222222', 4),
-	('333333333333', 5),
-	('333333333333', 6),
-	('444444444444', 7),
-	('444444444444', 8),
-	('555555555555', 9),
-	('555555555555', 10),
-	('000000000000', 1),
-	('000000000000', 2),
-	('000000000000', 3),
-	('000000000000', 4),
-	('000000000000', 5),
-	('000000000000', 6),
-	('000000000000', 7),
-	('000000000000', 8),
-	('000000000000', 9),
-	('000000000000', 10);
+-- INSERT INTO Staff_Category
+-- 	(user_id, category_id)
+-- VALUES
+-- 	('111111111111', 1),
+-- 	('111111111111', 2),
+-- 	('222222222222', 3),
+-- 	('222222222222', 4),
+-- 	('333333333333', 5),
+-- 	('333333333333', 6),
+-- 	('444444444444', 7),
+-- 	('444444444444', 8),
+-- 	('555555555555', 9),
+-- 	('555555555555', 10),
+-- 	('000000000000', 1),
+-- 	('000000000000', 2),
+-- 	('000000000000', 3),
+-- 	('000000000000', 4),
+-- 	('000000000000', 5),
+-- 	('000000000000', 6),
+-- 	('000000000000', 7),
+-- 	('000000000000', 8),
+-- 	('000000000000', 9),
+-- 	('000000000000', 10);
 
 
 -- Insert into [Request]
 INSERT INTO [Request]
 	(user_id, category_id, reason, attachment, process_note)
 VALUES
-	('012345678901', 2, 'no reason', 'no attachment', 'cần xem xét thêm'),
-	('012345678902', 10, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('012345678903', 7, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('012345678904', 2, 'this is reason', 'no attachment', 'lý do chưa chính đáng'),
-	('111111111111', 1, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('123456789012', 9, 'xu ly giay to', 'no attachment', 'cần xem xét thêm'),
-	('123456789013', 10, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('123456789014', 3, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('123456789015', 9, 'no reason', 'no attachment', 'lý do chưa chính đáng'),
-	('123456789016', 9, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('222222222222', 9, 'abcd', 'no attachment', 'cần xem xét thêm'),
-	('234567890123', 4, 'this is reason', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('234567890124', 3, 'no reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('234567890125', 5, 'xu ly giay to', 'no attachment', 'lý do chưa chính đáng'),
-	('234567890126', 9, 'abcd', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('234567890127', 9, 'this is reason', 'no attachment', 'cần xem xét thêm'),
-	('333333333333', 2, 'no reason', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('345678901234', 9, 'xu ly giay to', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('345678901235', 3, 'abcd', 'no attachment', 'lý do chưa chính đáng'),
-	('345678901236', 5, 'this is reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('345678901237', 4, 'no reason', 'no attachment', 'cần xem xét thêm'),
-	('345678901238', 4, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('444444444444', 9, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('456789012345', 2, 'this is reason', 'no attachment', 'lý do chưa chính đáng'),
-	('456789012346', 10, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('456789012347', 6, 'xu ly giay to', 'no attachment', 'cần xem xét thêm'),
-	('456789012348', 7, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('456789012349', 2, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('555555555555', 1, 'no reason', 'no attachment', 'lý do chưa chính đáng'),
-	('567890123456', 2, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('567890123457', 4, 'abcd', 'no attachment', 'cần xem xét thêm'),
-	('567890123458', 6, 'this is reason', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('567890123459', 2, 'no reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('567890123460', 2, 'xu ly giay to', 'no attachment', 'lý do chưa chính đáng'),
-	('678901234567', 2, 'abcd', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('678901234568', 8, 'this is reason', 'no attachment', 'cần xem xét thêm'),
-	('678901234569', 6, 'no reason', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('678901234570', 6, 'xu ly giay to', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('789012345678', 9, 'abcd', 'no attachment', 'lý do chưa chính đáng'),
-	('789012345679', 3, 'this is reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('789012345680', 5, 'no reason', 'no attachment', 'cần xem xét thêm'),
-	('789012345681', 8, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('890123456789', 8, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('890123456790', 3, 'this is reason', 'no attachment', 'lý do chưa chính đáng'),
-	('890123456791', 9, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố'),
-	('890123456792', 7, 'xu ly giay to', 'no attachment', 'cần xem xét thêm'),
-	('901234567890', 5, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý'),
-	('901234567891', 6, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ'),
-	('901234567892', 5, 'no reason', 'no attachment', 'lý do chưa chính đáng'),
+	('012345678901', 2, 'no reason', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('012345678902', 10, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('012345678903', 7, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('012345678904', 2, 'this is reason', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('111111111111', 1, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('123456789012', 9, 'xu ly giay to', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('123456789013', 10, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('123456789014', 3, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('123456789015', 9, 'no reason', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('123456789016', 9, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('222222222222', 9, 'abcd', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('234567890123', 4, 'this is reason', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('234567890124', 3, 'no reason', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('234567890125', 5, 'xu ly giay to', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('234567890126', 9, 'abcd', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('234567890127', 9, 'this is reason', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('333333333333', 2, 'no reason', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('345678901234', 9, 'xu ly giay to', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('345678901235', 3, 'abcd', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('345678901236', 5, 'this is reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('345678901237', 4, 'no reason', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('345678901238', 4, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('444444444444', 9, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('456789012345', 2, 'this is reason', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('456789012346', 10, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('456789012347', 6, 'xu ly giay to', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('456789012348', 7, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('456789012349', 2, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('555555555555', 1, 'no reason', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('567890123456', 2, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('567890123457', 4, 'abcd', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('567890123458', 6, 'this is reason', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('567890123459', 2, 'no reason', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('567890123460', 2, 'xu ly giay to', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('678901234567', 2, 'abcd', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('678901234568', 8, 'this is reason', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('678901234569', 6, 'no reason', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('678901234570', 6, 'xu ly giay to', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('789012345678', 9, 'abcd', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('789012345679', 3, 'this is reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('789012345680', 5, 'no reason', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('789012345681', 8, 'xu ly giay to', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('890123456789', 8, 'abcd', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('890123456790', 3, 'this is reason', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('890123456791', 9, 'no reason', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('890123456792', 7, 'xu ly giay to', 'no attachment', 'cần xem xét thêm');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('901234567890', 5, 'abcd', 'no attachment', 'gửi cho cấp trên xử lý');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('901234567891', 6, 'this is reason', 'no attachment', 'chứng minh nhân dân không hợp lệ');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
+	('901234567892', 5, 'no reason', 'no attachment', 'lý do chưa chính đáng');
+INSERT INTO [Request]
+	(user_id, category_id, reason, attachment, process_note)
+VALUES
 	('901234567893', 6, 'xu ly giay to', 'no attachment', 'cần có xác nhận của tòa án nhân dân thành phố');
 update [Request] set status = 'Submitted' where status is null;
 update [Request] set assigned_to = '111111111111' where user_id LIKE '%0' or user_id LIKE '%1';
@@ -198,4 +345,11 @@ update [Request] set assigned_to = '444444444444' where user_id LIKE '%8' or use
 -- alter table [Request] alter column [status] varchar(50);
 -- dotnet ef DBcontext scaffold "server =(local); database = PRN221_OneStopOffice; uid=sa;pwd=123456;Trusted_Connection=True;Encrypt=False" Microsoft.EntityFrameworkCore.SqlServer -o Models2 
 
-select * from Request WHERE assigned_to = '111111111111' 
+select *
+from Request
+WHERE assigned_to = '333333333333'
+;
+select *
+from Request
+WHERE user_id = '000000000000';
+-- dotnet ef DBcontext scaffold "server =(local); database = PRN221_OneStopOffice; uid=sa;pwd=123;Trusted_Connection=True;Encrypt=False" Microsoft.EntityFrameworkCore.SqlServer -o Models --force

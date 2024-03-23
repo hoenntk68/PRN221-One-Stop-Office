@@ -1,7 +1,5 @@
 <template lang="">
-    <div class="wrapper">
-        
-    </div>
+        <img alt="logo" class="logo" src="@/assets/homepage.png" width="1250px" height="600px" />
 </template>
 <script>
 export default {

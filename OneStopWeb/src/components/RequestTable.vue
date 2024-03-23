@@ -14,8 +14,8 @@
           </el-select>
         </span>
         <span>Lý do</span>
-        <span>File đính kèm</span>
-        <el-select v-model="requestFilter.orderBy" @change="handleFilter()">
+        <span>Ghi chú Cán bộ</span>
+        <el-select v-model="requestFilter.sortOption" @change="handleFilter()">
           <el-option label="Cũ" value="asc"></el-option>
           <el-option label="Mới" value="desc"></el-option>
         </el-select>
@@ -40,12 +40,13 @@
         </span>
         <span>{{ item.category }}</span>
         <span>{{ item.reason }}</span>
-        <span>{{ item.file }}</span>
+        <span>{{ item.processNote }}</span>
         <span>{{ item.submittedAt }}</span>
         <span>{{ item.status }}</span>
         <div>
           <el-button type="primary" @click="navigateDetails(item.id)">Chi tiết</el-button>
-          <el-button v-if="item.status != 'approved'" type="danger" @click="handleDelete(item.id, 'Cancelled')">Hủy yêu
+          <el-button v-if="item.status != 'approved' && !state.isSuperAdmin" type="danger"
+            @click="handleDelete(item.id, 'Cancelled')">Hủy yêu
             cầu</el-button>
         </div>
       </div>
@@ -56,6 +57,7 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRequestStore } from '@/stores/request';
+import { useAuthStore } from '@/stores/auth';
 import service from '../plugins/service';
 import { $notify } from '@/utils/variables';
 
@@ -69,6 +71,8 @@ export default {
       requestFilter,
       selectedItems,
     } = requestStore;
+
+    const { state } = useAuthStore();
 
     const checkAll = ref(false);
 
@@ -141,6 +145,7 @@ export default {
       checkAll,
       fetchCategory,
       categoryList,
+      state,
     };
   }
 

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OneStopOfficeBE.Models{
+namespace OneStopOfficeBE.Models
+{
     public partial class User
     {
         public User()
         {
             RequestAssignedToNavigations = new HashSet<Request>();
             RequestUsers = new HashSet<Request>();
-            Categories = new HashSet<Category>();
         }
 
         public string UserId { get; set; } = null!;
@@ -26,7 +26,5 @@ namespace OneStopOfficeBE.Models{
 
         public virtual ICollection<Request> RequestAssignedToNavigations { get; set; }
         public virtual ICollection<Request> RequestUsers { get; set; }
-
-        public virtual ICollection<Category> Categories { get; set; }
     }
 }

@@ -8,7 +8,6 @@ namespace OneStopOfficeBE.Models
         public Category()
         {
             Requests = new HashSet<Request>();
-            Users = new HashSet<User>();
         }
 
         public int CategoryId { get; set; }
@@ -16,7 +15,5 @@ namespace OneStopOfficeBE.Models
         public string? Description { get; set; }
 
         public virtual ICollection<Request> Requests { get; set; }
-
-        public virtual ICollection<User> Users { get; set; }
     }
 }

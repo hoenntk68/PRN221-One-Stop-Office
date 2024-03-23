@@ -24,8 +24,8 @@ namespace OneStopOfficeBE.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var ConnectionString = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
-                optionsBuilder.UseSqlServer(ConnectionString);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server =(local); database = PRN221_OneStopOffice; uid=sa;pwd=123;Trusted_Connection=True;Encrypt=False");
             }
         }
 
@@ -71,17 +71,14 @@ namespace OneStopOfficeBE.Models
 
                 entity.Property(e => e.ProcessNote)
                     .HasMaxLength(500)
-                    .IsUnicode(false)
                     .HasColumnName("process_note");
 
                 entity.Property(e => e.Reason)
                     .HasMaxLength(500)
-                    .IsUnicode(false)
                     .HasColumnName("reason");
 
                 entity.Property(e => e.Status)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
                     .HasColumnName("status");
 
                 entity.Property(e => e.UpdateAt)
@@ -97,17 +94,17 @@ namespace OneStopOfficeBE.Models
                 entity.HasOne(d => d.AssignedToNavigation)
                     .WithMany(p => p.RequestAssignedToNavigations)
                     .HasForeignKey(d => d.AssignedTo)
-                    .HasConstraintName("FK__Request__assigne__74444068");
+                    .HasConstraintName("FK__Request__assigne__13BCEBC1");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Requests)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Request__categor__753864A1");
+                    .HasConstraintName("FK__Request__categor__14B10FFA");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.RequestUsers)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Request__user_id__73501C2F");
+                    .HasConstraintName("FK__Request__user_id__12C8C788");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -158,23 +155,6 @@ namespace OneStopOfficeBE.Models
                     .HasMaxLength(1000)
                     .IsUnicode(false)
                     .HasColumnName("token");
-
-                entity.HasMany(d => d.Categories)
-                    .WithMany(p => p.Users)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "StaffCategory",
-                        l => l.HasOne<Category>().WithMany().HasForeignKey("CategoryId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__categ__6D9742D9"),
-                        r => r.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Staff_Cat__user___6E8B6712"),
-                        j =>
-                        {
-                            j.HasKey("UserId", "CategoryId").HasName("PK__Staff_Ca__E4EAD994C37DEA2A");
-
-                            j.ToTable("Staff_Category");
-
-                            j.IndexerProperty<string>("UserId").HasMaxLength(50).IsUnicode(false).HasColumnName("user_id");
-
-                            j.IndexerProperty<int>("CategoryId").HasColumnName("category_id");
-                        });
             });
 
             OnModelCreatingPartial(modelBuilder);

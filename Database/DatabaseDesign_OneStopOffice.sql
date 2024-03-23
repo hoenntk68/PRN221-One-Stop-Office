@@ -46,23 +46,23 @@ CREATE TABLE Category (
 );
 
 -- Create the 'category_staff' table
-CREATE TABLE Staff_Category (
-    user_id VARCHAR(50),
-    category_id INT,
-    FOREIGN KEY (category_id) REFERENCES category(category_id),
-	FOREIGN KEY (user_id) REFERENCES [User](user_id),
-	PRIMARY KEY (user_id, category_id)
-);
+-- CREATE TABLE Staff_Category (
+--     user_id VARCHAR(50),
+--     category_id INT,
+--     FOREIGN KEY (category_id) REFERENCES category(category_id),
+-- 	FOREIGN KEY (user_id) REFERENCES [User](user_id),
+-- 	PRIMARY KEY (user_id, category_id)
+-- );
 
 -- Create the 'request' table
 CREATE TABLE Request (
     request_id INT PRIMARY KEY IDENTITY(1,1),
     [user_id] VARCHAR(50),
     category_id INT,
-    reason VARCHAR(500),
+    reason NVARCHAR(500),
     attachment VARCHAR(500),
-	process_note VARCHAR(500),
-	[status] VARCHAR(50),
+	process_note NVARCHAR(500),
+	[status] NVARCHAR(50),
     assigned_to VARCHAR(50),
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	update_at DATETIME DEFAULT CURRENT_TIMESTAMP,
